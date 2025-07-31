@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Overview &mdash; Manual 1.0 documentation</title>
+  <title>Overview &mdash; ROS2 Manual Guide v1.0</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -14,7 +14,7 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=f2a433a1"></script>
-      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -33,6 +33,7 @@
           
           <a href="index.html" class="icon icon-home">
             Manual
+              <img src="_static/Doosan_logo.svg.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,7 +45,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#feature">Feature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="launch_parameters.html">Launch Parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
@@ -77,9 +84,44 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="overview">
+  <a class="reference external image-reference" href="https://www.apache.org/licenses/LICENSE-2.0"><img alt="Apache License 2.0" src="https://img.shields.io/badge/license-Apache%202.0-yellowgreen" />
+</a>
+<img alt="Community Support" src="https://img.shields.io/badge/support%20level-community-lightgrey" />
+<section id="overview">
 <span id="id1"></span><h1>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h1>
-<p>This package provides the function to control all models of Doosan robots in the ROS2(Humble) environment.</p>
+<section id="purpose">
+<h2>Purpose<a class="headerlink" href="#purpose" title="Link to this heading"></a></h2>
+<p>This package provides the function to control all models of Doosan robots in the <strong>ROS2(Jazzy) environment.</strong></p>
+</section>
+<section id="feature">
+<h2>Feature<a class="headerlink" href="#feature" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Support for all Doosan robot models (A/M/H/E/P series)</p></li>
+<li><p>Virtual emulator mode for control without physical hardware</p></li>
+<li><p>DRFL (Doosan Robot Framework Library) API integrated for direct command access</p></li>
+<li><p>Real-time control interface (optional use)</p></li>
+<li><p>Pre-configured launch files for RViz2, Gazebo, MoveIt 2</p></li>
+<li><p>MoveIt 2 support for motion planning and manipulation</p></li>
+<li><p>Gazebo Harmonic simulation support for testing and validation</p></li>
+<li><p>RViz2 support robot state visualization and motion planning previews.</p></li>
+<li><p>Sample applications and demo scripts included for quick start</p></li>
+</ul>
+</section>
+<section id="environment">
+<h2>Environment<a class="headerlink" href="#environment" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>OS: Ubuntu 24.04 LTS</p></li>
+<li><p>ROS 2: Jazzy Jalisco</p></li>
+<li><p>MoveIt: Moveit2 (Jazzy release)</p></li>
+<li><p>Gazebo: Harmonic</p></li>
+<li><p>Language: Python ≥ 3.10, C++17</p></li>
+</ul>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
+<p>All packages are licensed under the <strong>Apache License 2.0</strong>.
+See the LICENSE file for more information.</p>
+</section>
 </section>
 
 

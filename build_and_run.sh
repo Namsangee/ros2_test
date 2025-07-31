@@ -1,7 +1,8 @@
 #!/bin/bash
 
 echo "Building Sphinx documentation..."
-sphinx-build -b html source build
+~/.local/share/pipx/venvs/sphinx/bin/sphinx-build -b html source build # for Ubuntu 24.04
+#sphinx-build -b html source build
 
 if [ $? -eq 0 ]; then
     echo "Documentation built successfully. Starting web server..."

@@ -1,6 +1,44 @@
+.. image:: https://img.shields.io/badge/license-Apache%202.0-yellowgreen
+   :target: https://www.apache.org/licenses/LICENSE-2.0
+   :alt: Apache License 2.0
+
+.. image:: https://img.shields.io/badge/support%20level-community-lightgrey
+   :alt: Community Support
+
+
 .. _overview:
+
 
 Overview
 ========
-    
-This package provides the function to control all models of Doosan robots in the ROS2(Humble) environment.
+
+Purpose
+---------------------
+This package provides the function to control all models of Doosan robots in the **ROS2(Jazzy) environment.**
+
+Feature
+-----
+- Support for all Doosan robot models (A/M/H/E/P series)
+- Virtual emulator mode for control without physical hardware
+- DRFL (Doosan Robot Framework Library) API integrated for direct command access
+- Real-time control interface (optional use)
+
+- Pre-configured launch files for RViz2, Gazebo, MoveIt 2
+- MoveIt 2 support for motion planning and manipulation
+- Gazebo Harmonic simulation support for testing and validation
+- RViz2 support robot state visualization and motion planning previews.
+
+- Sample applications and demo scripts included for quick start
+
+Environment
+---
+- OS: Ubuntu 24.04 LTS
+- ROS 2: Jazzy Jalisco
+- MoveIt: Moveit2 (Jazzy release)
+- Gazebo: Harmonic
+- Language: Python ≥ 3.10, C++17
+
+License
+---
+All packages are licensed under the **Apache License 2.0**.  
+See the LICENSE file for more information.

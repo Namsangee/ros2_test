@@ -9,14 +9,19 @@
 project = 'Manual'
 copyright = '2025, ms'
 author = 'ms'
-
 version = '1.0'
 release = '1.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+extensions = [
+    'sphinx.ext.autodoc',     # 자동 문서화: docstring 기반
+    'sphinx.ext.napoleon',    # 구글/넘피 스타일 docstring 파싱
+    'sphinx.ext.todo',        # TODO 지원 (.. todo::)
+    'sphinx.ext.viewcode'     # 소스코드 보기 링크
+]
+
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -28,3 +33,8 @@ exclude_patterns = []
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+
+# 문서 제목 변경
+html_title = 'ROS2 Manual Guide v1.0'
+html_logo = '/home/nam/manual/ros-manual/build/_static/Doosan_logo.svg.png' # logo
+# html_favicon = '_static/favicon.ico'
