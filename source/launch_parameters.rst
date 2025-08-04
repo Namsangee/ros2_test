@@ -2,47 +2,84 @@
 
 Launch Parameters
 =================
+This section describes configurable launch parameters used to start the robot system with different modes and options.  
+These parameters can be passed via the command line using `ros2 launch` or modified within launch files.
+
 
 **mode**
 --------
+Defines whether the robot runs in physical or virtual mode.
 
-- ``mode:=real`` → Drive a robot in reality (default IP: ``192.168.127.100``, port: ``12345``)
-- ``mode:=virtual`` → Drive a robot virtually (default IP: ``127.0.0.1``, port: ``12345``)
-  - Emulator starts and terminates automatically with launch lifetime.
+- ``mode:=real``  
+  Runs a physical robot.  
+  (Default IP: ``192.168.127.100``, Port: ``12345``)
+
+- ``mode:=virtual``  
+  Runs the robot in virtual (simulated) mode.  
+  (Default IP: ``127.0.0.1``, Port: ``12345``)
+
+The emulator will start and stop automatically during the launch lifecycle.
+
 
 **name**
--------
+--------
+Specifies the namespace assigned to the robot.  
 
-- Robot namespace (Default: ``dsr01``)
+- Default: ``dsr01``
+
 
 **host**
--------
+--------
+Sets the IP address of the **Doosan Robotics Controller**.  
 
-- IP Address of **Doosan Robotics Controller**
-  - Default: ``192.168.137.100``
-  - Virtual mode: ``127.0.0.1``
+- Default: ``192.168.137.100``  
+- For virtual mode: ``127.0.0.1``
+
 
 **port**
--------
+--------
+Specifies the TCP port used to connect to the robot controller.  
 
-- Port of **Doosan Robotics Controller** (Default: ``12345``)
+- Default: ``12345``
+
 
 **model**
---------
+---------
+Defines the robot model name.  
 
-- Doosan robot model name
+- Example: ``m1013``, ``a0509``
+
+.. note::
+   Ensure it matches your actual robot hardware or simulation target.
+
 
 **color**
---------
+---------
+Sets the color of the robot arm (affects visualization).  
 
-- Select ``white`` or ``blue`` (Only ``white`` for E0609)
+- Options: ``white`` or ``blue``
+
+.. note::
+   Only ``white`` is supported for model ``E0609``.
+
 
 **gui**
-------
+-------
+Enable or disable the GUI (e.g., RViz2) during launch.  
 
-- Activate/Deactivate GUI (``true``/``false``)
+- Options: ``true`` / ``false``
+
 
 **gz**
------
+------
+Enable or disable the Gazebo Simulation environment.  
 
-- Activate/Deactivate Gazebo Simulation (``true``/``false``)
+- Options: ``true`` / ``false``
+
+
+**rt_host**
+-----------
+Specifies the IP address used for the real-time robot controller connection.  
+
+- Default: ``192.168.137.50``  
+- Used primarily for motion stream interfaces or internal sync mechanisms.

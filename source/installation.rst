@@ -15,13 +15,10 @@ Before installing the package, ensure that the necessary dependencies are instal
 
 .. code-block:: bash
 
-   sudo apt-get update
-   sudo apt-get install -y libpoco-dev libyaml-cpp-dev wget \
-                           ros-humble-control-msgs ros-humble-realtime-tools ros-humble-xacro \
-                           ros-humble-joint-state-publisher-gui ros-humble-ros2-control \
-                           ros-humble-ros2-controllers ros-humble-gazebo-msgs ros-humble-moveit-msgs \
-                           dbus-x11 ros-humble-moveit-configs-utils ros-humble-moveit-ros-move-group \
-                           ros-humble-gazebo-ros-pkgs ros-humble-ros-gz-sim ros-humble-ign-ros2-control
+   sudo apt update
+   sudo apt install ros-jazzy-ros-gz \
+                     ros-jazzy-gz-ros2-control
+
 
 Install Gazebo Simulation
 -------------------------

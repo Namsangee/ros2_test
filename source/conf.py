@@ -26,7 +26,11 @@ extensions = [
 templates_path = ['_templates']
 exclude_patterns = []
 
+rst_prolog = """
+.. |br| raw:: html
 
+   <br />
+"""
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -36,5 +40,5 @@ html_static_path = ['_static']
 
 # 문서 제목 변경
 html_title = 'ROS2 Manual Guide v1.0'
-html_logo = '/home/nam/manual/ros-manual/build/_static/Doosan_logo.svg.png' # logo
+html_logo = '/home/nam/manual/ros-manual/source/_static/tutorial/Doosan_logo.svg.png' # logo
 # html_favicon = '_static/favicon.ico'
