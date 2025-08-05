@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Launch Parameters" href="launch_parameters.html" />
-    <link rel="prev" title="Overview" href="overview.html" /> 
+    <link rel="prev" title="Packages" href="overview/package.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,13 +49,12 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#required-dependencies">Required Dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#install-gazebo-simulation">Install Gazebo Simulation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#package-installation">Package Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-settings">Build &amp; Settings</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="launch_parameters.html">Launch Parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html#indices-and-tables">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="topics.html">Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="services.html">Services</a></li>
 <li class="toctree-l1"><a class="reference internal" href="additional_resources.html">Additional Resources</a></li>
@@ -90,35 +89,36 @@
 <span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
-<p>To utilize the new emulator in virtual mode, <strong>Docker</strong> is required. Install Docker by following the official guide: <a class="reference external" href="https://docs.docker.com/engine/install/ubuntu/">Docker Installation for Ubuntu</a></p>
+<p>This package is developed for ROS 2 Jazzy. Please ensure you have a working ROS 2 Jazzy installation by following the <a class="reference external" href="https://docs.ros.org/en/jazzy/Installation.html">official installation guide</a>.</p>
+<p>To utilize the new emulator in virtual mode, <strong>Docker</strong> is required. Install Docker by following the <a class="reference external" href="https://docs.docker.com/engine/install/ubuntu/">Docker official installation guide for Ubuntu</a>.</p>
 </section>
 <section id="required-dependencies">
 <h2>Required Dependencies<a class="headerlink" href="#required-dependencies" title="Link to this heading"></a></h2>
 <p>Before installing the package, ensure that the necessary dependencies are installed:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>update
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>ros-jazzy-ros-gz<span class="w"> </span><span class="se">\</span>
-<span class="w">                  </span>ros-jazzy-gz-ros2-control
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>libpoco-dev<span class="w"> </span>libyaml-cpp-dev<span class="w"> </span>wget<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>ros-jazzy-control-msgs<span class="w"> </span>ros-jazzy-realtime-tools<span class="w"> </span>ros-jazzy-xacro<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>ros-jazzy-joint-state-publisher-gui<span class="w"> </span>ros-jazzy-ros2-control<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>ros-jazzy-ros2-controllers<span class="w"> </span>ros-jazzy-gazebo-msgs<span class="w"> </span>ros-jazzy-moveit-msgs<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>dbus-x11<span class="w"> </span>ros-jazzy-moveit-configs-utils<span class="w"> </span>ros-jazzy-moveit-ros-move-group<span class="w"> </span><span class="se">\</span>
 </pre></div>
 </div>
-</section>
-<section id="install-gazebo-simulation">
-<h2>Install Gazebo Simulation<a class="headerlink" href="#install-gazebo-simulation" title="Link to this heading"></a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main&quot; &gt; /etc/apt/sources.list.d/gazebo-stable.list&#39;</span>
-wget<span class="w"> </span>http://packages.osrfoundation.org/gazebo.key<span class="w"> </span>-O<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>apt-key<span class="w"> </span>add<span class="w"> </span>-
-sudo<span class="w"> </span>apt-get<span class="w"> </span>update
-sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>libignition-gazebo6-dev<span class="w"> </span>ros-humble-gazebo-ros-pkgs<span class="w"> </span>ros-humble-ros-gz-sim<span class="w"> </span>ros-humble-ros-gz
+<p>Install Gazebo Simulation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>ros-jazzy-ros-gz<span class="w"> </span>ros-jazzy-gz-ros2-control
 </pre></div>
 </div>
 </section>
 <section id="package-installation">
 <h2>Package Installation<a class="headerlink" href="#package-installation" title="Link to this heading"></a></h2>
-<p>Ensure that you have installed <strong>ros-humble-desktop</strong> using <cite>apt-get</cite>. We recommend placing the package inside:</p>
+<p>Ensure that you have installed <strong>ros-jazzy-desktop</strong> using <cite>apt-get</cite>.
+We recommend placing the package inside:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>~/ros2_ws/src
 <span class="nb">cd</span><span class="w"> </span>~/ros2_ws/src
 </pre></div>
 </div>
 <p>Clone the required repositories:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>humble<span class="w"> </span>https://github.com/doosan-robotics/doosan-robot2.git
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>jazzy<span class="w"> </span>https://github.com/doosan-robotics/doosan-robot2.git
 </pre></div>
 </div>
 <p>Install dependencies:</p>
@@ -131,16 +131,33 @@ chmod<span class="w"> </span>+x<span class="w"> </span>./install_emulator.sh
 sudo<span class="w"> </span>./install_emulator.sh
 </pre></div>
 </div>
-<p>Build the package:</p>
+</section>
+<section id="build-settings">
+<h2>Build &amp; Settings<a class="headerlink" href="#build-settings" title="Link to this heading"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/ros2_ws
 colcon<span class="w"> </span>build
 .<span class="w"> </span>install/setup.bash
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>To use <strong>ROS2 with Version 3.x Controller</strong>, specify the build option:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>colcon<span class="w"> </span>build<span class="w"> </span>--cmake-args<span class="w"> </span>-DDRCF_VER<span class="o">=</span><span class="m">3</span>
 </pre></div>
 </div>
+</div>
+<p>Need to add the <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> of the repo to your <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code>:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export PYTHONPATH=$PYTHONPATH:~/ros2_ws/install/dsr_common2/lib/dsr_common2/imp&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>~/.bashrc
+</pre></div>
+</div>
+</div></blockquote>
+<p>Try to test the installation by running the following command:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>launch<span class="w"> </span>dsr_bringup2<span class="w"> </span>dsr_bringup2_rviz.launch.py
+</pre></div>
+</div>
+</div></blockquote>
 </section>
 </section>
 
@@ -148,7 +165,7 @@ colcon<span class="w"> </span>build
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="overview/package.html" class="btn btn-neutral float-left" title="Packages" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="launch_parameters.html" class="btn btn-neutral float-right" title="Launch Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
