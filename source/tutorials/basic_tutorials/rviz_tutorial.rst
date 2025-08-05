@@ -24,7 +24,8 @@ This launch file starts Rviz2 for visualizing the robot model and its state.
 Examples
 ----------
 
-**Launch**
+Launch
+~~~~~~~~
 
 To ensure proper launch and connection, the ``mode`` and ``host`` arguments should be configured accordingly.
 
@@ -51,7 +52,37 @@ To ensure proper launch and connection, the ``mode`` and ``host`` arguments shou
      :width: 800px
      :align: center
 
-**Example move**
+
+   .. raw:: html
+      
+      <br>
+      <br>
+
+- Launch with different model and configurations:
+
+  .. image:: ../../_static/tutorial/m0609_launch_rviz2.png
+     :alt: Robot Model Preview
+     :width: 800px
+     :align: center
+
+  .. code-block:: bash
+
+     ros2 launch dsr_bringup2 dsr_bringup2_rviz.launch.py mode:=virtual host:=127.0.0.1 model:=m0609
+
+  .. image:: ../../_static/tutorial/h2017_launch_rviz2.png
+     :alt: Robot Model Preview
+     :width: 800px
+     :align: center
+
+  .. code-block:: bash
+
+     ros2 launch dsr_bringup2 dsr_bringup2_rviz.launch.py mode:=virtual host:=127.0.0.1 model:=h2017 color:=blue
+
+  .. note::
+     You can check robot models in ``dsr_description2`` package
+
+Example move
+~~~~~~~~
 
 Once RViz2 is running, you can test the setup by executing a simple motion script.
 
