@@ -21,21 +21,49 @@ This launch file starts Rviz2 for visualizing the robot model and its state.
 - ``color``: Robot color (``white`` or ``blue``)
 - ``rt_host``: Real-time controller IP (Default: ``192.168.137.50``)
 
-**Examples:**
+Examples
+----------
 
-- Real Robot:
+**Launch**
+
+To ensure proper launch and connection, the ``mode`` and ``host`` arguments should be configured accordingly.
+
+- Using a real robot:
+
+  Establish an Ethernet connection with your PC.
+
+  Verify the IP address on the robot controller and ensure it matches the connection settings.
 
   .. code-block:: bash
 
      ros2 launch dsr_bringup2 dsr_bringup2_rviz.launch.py mode:=real host:=192.168.137.100 model:=m1013
 
-- Virtual Robot:
+- Using a virtual robot:
+
+  Virtual IP address will be always ``127.0.0.1``.
 
   .. code-block:: bash
 
      ros2 launch dsr_bringup2 dsr_bringup2_rviz.launch.py mode:=virtual host:=127.0.0.1 model:=m1013
 
-.. image:: ../../_static/tutorial/rviz1.png
-   :alt: Robot Model Preview
-   :width: 800px
-   :align: center
+  .. image:: ../../_static/tutorial/rviz1.png
+     :alt: Robot Model Preview
+     :width: 800px
+     :align: center
+
+**Example move**
+
+Once RViz2 is running, you can test the setup by executing a simple motion script.
+
+Open a new terminal and run the following command:
+
+.. code-block:: bash
+
+    ros2 run dsr_example single_robot_simple
+
+.. image:: ../../_static/tutorial/rviz2.png
+     :alt: Robot Model Preview
+     :width: 800px
+     :align: center
+
+Example scripts are available in ``dsr_example2`` package.
