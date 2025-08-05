@@ -13,6 +13,8 @@ Welcome to Manual's documentation!
    services
    additional_resources
    policy_and_notice
+   changelog/changelog
+   faq/faq_index
 
 Indices and tables
 ==================
