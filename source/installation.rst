@@ -6,7 +6,9 @@ Installation
 Prerequisites
 -------------
 
-To utilize the new emulator in virtual mode, **Docker** is required. Install Docker by following the official guide: `Docker Installation for Ubuntu <https://docs.docker.com/engine/install/ubuntu/>`_
+This package is developed for ROS 2 Jazzy. Please ensure you have a working ROS 2 Jazzy installation by following the `official installation guide <https://docs.ros.org/en/jazzy/Installation.html>`_.
+
+To utilize the new emulator in virtual mode, **Docker** is required. Install Docker by following the `Docker official installation guide for Ubuntu <https://docs.docker.com/engine/install/ubuntu/>`_.
 
 Required Dependencies
 ---------------------
@@ -16,24 +18,25 @@ Before installing the package, ensure that the necessary dependencies are instal
 .. code-block:: bash
 
    sudo apt update
-   sudo apt install ros-jazzy-ros-gz \
-                     ros-jazzy-gz-ros2-control
+   sudo apt-get install -y libpoco-dev libyaml-cpp-dev wget \
+      ros-jazzy-control-msgs ros-jazzy-realtime-tools ros-jazzy-xacro \
+      ros-jazzy-joint-state-publisher-gui ros-jazzy-ros2-control \
+      ros-jazzy-ros2-controllers ros-jazzy-gazebo-msgs ros-jazzy-moveit-msgs \
+      dbus-x11 ros-jazzy-moveit-configs-utils ros-jazzy-moveit-ros-move-group \
 
 
-Install Gazebo Simulation
--------------------------
+Install Gazebo Simulation:
 
 .. code-block:: bash
 
-   sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
-   wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
    sudo apt-get update
-   sudo apt-get install -y libignition-gazebo6-dev ros-humble-gazebo-ros-pkgs ros-humble-ros-gz-sim ros-humble-ros-gz
+   sudo apt-get install -y ros-jazzy-ros-gz ros-jazzy-gz-ros2-control
 
 Package Installation
 --------------------
 
-Ensure that you have installed **ros-humble-desktop** using `apt-get`. We recommend placing the package inside:
+Ensure that you have installed **ros-jazzy-desktop** using `apt-get`. 
+We recommend placing the package inside:
 
 .. code-block:: bash
 
@@ -44,7 +47,7 @@ Clone the required repositories:
 
 .. code-block:: bash
 
-   git clone -b humble https://github.com/doosan-robotics/doosan-robot2.git
+   git clone -b jazzy https://github.com/doosan-robotics/doosan-robot2.git
 
 Install dependencies:
 
@@ -60,7 +63,8 @@ Run the emulator installation script:
    chmod +x ./install_emulator.sh
    sudo ./install_emulator.sh
 
-Build the package:
+Build & Settings
+--------------------
 
 .. code-block:: bash
 
@@ -68,8 +72,23 @@ Build the package:
    colcon build
    . install/setup.bash
 
-To use **ROS2 with Version 3.x Controller**, specify the build option:
+.. note::
+   To use **ROS2 with Version 3.x Controller**, specify the build option:
 
-.. code-block:: bash
+   .. code-block:: bash
 
-   colcon build --cmake-args -DDRCF_VER=3
+      colcon build --cmake-args -DDRCF_VER=3
+
+
+Need to add the ``PYTHONPATH`` of the repo to your ``.bashrc``:
+
+   .. code-block:: bash
+
+      echo 'export PYTHONPATH=$PYTHONPATH:~/ros2_ws/install/dsr_common2/lib/dsr_common2/imp' >> ~/.bashrc && source ~/.bashrc
+
+
+Try to test the installation by running the following command:
+
+   .. code-block:: bash
+
+      ros2 launch dsr_bringup2 dsr_bringup2_rviz.launch.py
