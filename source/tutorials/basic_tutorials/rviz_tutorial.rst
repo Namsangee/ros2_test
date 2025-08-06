@@ -113,3 +113,13 @@ Or you can directly move the robot by calling a service or topic :
          blend_type: 0,
          sync_type: 0
          }"
+
+.. image:: rviz2_launch_service_call.gif
+   :alt: MoveIt Motion Execution
+   :width: 100%
+   :align: center
+
+.. raw:: html
+
+   <br>
+   <br>

@@ -3,8 +3,7 @@
 Services
 ********
 
-
-This section describes the various ROS2 Services used in the Doosan Robotics package.
+This section describes the various ROS2 Services used in the Doosan Robotics package, detailing the structure of their request and response messages.
 
 .. contents::
    :depth: 2
