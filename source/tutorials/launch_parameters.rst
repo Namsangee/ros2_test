@@ -5,9 +5,18 @@ Launch Parameters
 This section describes configurable launch parameters used to start the robot system with different modes and options.  
 These parameters can be passed via the command line using `ros2 launch` or modified within launch files.
 
+**Example command:**
+
+.. code-block:: bash
+
+     ros2 launch dsr_bringup2 dsr_bringup2_rviz.launch.py mode:=virtual \
+       host:=127.0.0.1 port:=12345 model:=m1013 gui:=true \
+       name:=dsr01 color:=white
+
 
 **mode**
 --------
+
 Defines whether the robot runs in physical or virtual mode.
 
 - ``mode:=real``  
@@ -23,6 +32,7 @@ The emulator will start and stop automatically during the launch lifecycle.
 
 **name**
 --------
+
 Specifies the namespace assigned to the robot.  
 
 - Default: ``dsr01``

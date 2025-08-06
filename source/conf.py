@@ -40,7 +40,7 @@ html_static_path = ['_static']
 
 # 문서 제목 변경
 html_title = 'ROS2 Manual Guide v1.0'
-html_logo = '/home/nam/manual/ros-manual/source/_static/tutorial/Doosan_logo.svg.png' # logo
+html_logo = '_static/tutorial/Doosan_logo.svg.png' # logo
 # html_favicon = '_static/favicon.ico'
 
 html_sidebars = {

@@ -7,7 +7,6 @@ Welcome to Manual's documentation!
 
    overview
    installation
-   launch_parameters
    tutorials
    topics
    services

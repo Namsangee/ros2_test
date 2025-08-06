@@ -2,10 +2,8 @@
 
 Tutorials
 =========
-This section provides step-by-step examples for launching the Doosan robot in various environments such as RViz2, Gazebo, and MoveIt2.  
+This section provides step-by-step instructions and examples for launching the Doosan robot in various environments such as RViz2, Gazebo, and MoveIt2.
 The tutorials are designed to support all models in the Doosan Robot Series, including A, M, H, E and P types.
-
-
 
 .. image:: _static/robot_series.png
    :alt: MoveIt RViz2 Launch Screenshot
@@ -20,6 +18,8 @@ The tutorials are designed to support all models in the Doosan Robot Series, inc
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
+   
+   tutorials/launch_parameters
+   tutorials/operation_modes
    tutorials/basic_tutorials
    tutorials/advanced_tutorials
