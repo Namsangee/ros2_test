@@ -24,7 +24,7 @@ command
 
    ros2 launch dsr_bringup2 dsr_bringup2_moveit.launch.py [arguments]
 
-Launch Arguments
+Arguments
 ----------------
 
 - ``mode``: Robot operation mode. Choose between:
@@ -35,7 +35,7 @@ Launch Arguments
 - ``model``: Robot model name (e.g., ``m1013``, ``a0509``, etc.)
 - ``host``: IP address of the robot controller (real mode) or emulator (virtual mode)
 
-Usage Examples
+Examples
 --------------
 
 **Real Mode (Physical Robot)**
@@ -61,7 +61,7 @@ This will launch:
 
    <br><br>
 
-.. image:: moveit_tutorial1.png
+.. image:: ../images/moveit/moveit_tutorial1.png
    :alt: MoveIt RViz2 Launch Screenshot
    :width: 100%
    :align: center
@@ -75,7 +75,7 @@ Motion Execution Demo
 
 The following animation demonstrates a typical pick-and-place motion planned and executed using MoveIt 2:
 
-.. image:: moveit.gif
+.. image:: ../images/moveit/moveit.gif
    :alt: MoveIt Motion Execution
    :width: 100%
    :align: center

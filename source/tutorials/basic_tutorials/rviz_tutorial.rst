@@ -13,13 +13,13 @@ This launch file starts Rviz2 for visualizing the robot model and its state.
 
 **Arguments:**
 
-- ``name``: Robot namespace (Default: ``dsr01``)
-- ``host``: IP address of the Doosan Controller (Default: ``127.0.0.1``)
-- ``port``: Communication port (Default: ``12345``)
-- ``mode``: Launch mode (``real`` or ``virtual``)
-- ``model``: Robot model name (e.g., ``m1013``)
-- ``color``: Robot color (``white`` or ``blue``)
-- ``rt_host``: Real-time controller IP (Default: ``192.168.137.50``)
+- ``mode``: Robot operation mode. Choose between:
+  
+  - ``real``: Connect to physical Doosan robot.
+  - ``virtual``: Run in simulator/emulator mode.
+  
+- ``model``: Robot model name (e.g., ``m1013``, ``a0509``, etc.)
+- ``host``: IP address of the robot controller (real mode) or emulator (virtual mode)
 
 Examples
 ----------

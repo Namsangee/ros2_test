@@ -6,56 +6,54 @@ Installation
 Prerequisites
 -------------
 
-This package is developed for ROS 2 Jazzy. Please ensure you have a working ROS 2 Jazzy installation by following the `official installation guide <https://docs.ros.org/en/jazzy/Installation.html>`_.
+This package is developed for **ROS 2 Jazzy**.  
+Please ensure you have a working ROS 2 Jazzy installation by following the `official installation guide <https://docs.ros.org/en/jazzy/Installation.html>`_.
 
-To utilize the new emulator in virtual mode, **Docker** is required. Install Docker by following the `Docker official installation guide for Ubuntu <https://docs.docker.com/engine/install/ubuntu/>`_.
+To utilize the **emulator in virtual mode**, **Docker** is required.  
+Install Docker by following the `Docker official installation guide for Ubuntu <https://docs.docker.com/engine/install/ubuntu/>`_.
 
 Required Dependencies
 ---------------------
 
-Before installing the package, ensure that the necessary dependencies are installed:
+Install the necessary system and ROS 2 dependencies:
 
 .. code-block:: bash
 
    sudo apt update
-   sudo apt-get install -y libpoco-dev libyaml-cpp-dev wget \
-      ros-jazzy-control-msgs ros-jazzy-realtime-tools ros-jazzy-xacro \
-      ros-jazzy-joint-state-publisher-gui ros-jazzy-ros2-control \
-      ros-jazzy-ros2-controllers ros-jazzy-gazebo-msgs ros-jazzy-moveit-msgs \
-      dbus-x11 ros-jazzy-moveit-configs-utils ros-jazzy-moveit-ros-move-group \
+   sudo apt install -y libpoco-dev libyaml-cpp-dev wget \
+     ros-jazzy-control-msgs ros-jazzy-realtime-tools ros-jazzy-xacro \
+     ros-jazzy-joint-state-publisher-gui ros-jazzy-ros2-control \
+     ros-jazzy-ros2-controllers ros-jazzy-gazebo-msgs ros-jazzy-moveit-msgs \
+     dbus-x11 ros-jazzy-moveit-configs-utils ros-jazzy-moveit-ros-move-group
 
-
-Install Gazebo Simulation:
+Install Gazebo Simulator support:
 
 .. code-block:: bash
 
-   sudo apt-get update
-   sudo apt-get install -y ros-jazzy-ros-gz ros-jazzy-gz-ros2-control
+   sudo apt install -y ros-jazzy-ros-gz ros-jazzy-gz-ros2-control
 
-Package Installation
---------------------
+Workspace & Package Setup
+--------------------------
 
-Ensure that you have installed **ros-jazzy-desktop** using `apt-get`. 
-We recommend placing the package inside:
+Create your workspace and clone the repository:
 
 .. code-block:: bash
 
    mkdir -p ~/ros2_ws/src
    cd ~/ros2_ws/src
-
-Clone the required repositories:
-
-.. code-block:: bash
-
    git clone -b jazzy https://github.com/doosan-robotics/doosan-robot2.git
 
-Install dependencies:
+Install package dependencies using rosdep:
 
 .. code-block:: bash
 
-   rosdep install -r --from-paths . --ignore-src --rosdistro $ROS_DISTRO -y
+   cd ~/ros2_ws
+   rosdep install -r --from-paths src --ignore-src --rosdistro $ROS_DISTRO -y
 
-Run the emulator installation script:
+Emulator Setup (Optional)
+--------------------------
+
+If you plan to use **emulator mode**, install the virtual DRCF emulator using:
 
 .. code-block:: bash
 
@@ -63,32 +61,50 @@ Run the emulator installation script:
    chmod +x ./install_emulator.sh
    sudo ./install_emulator.sh
 
-Build & Settings
---------------------
+.. note::
+   This will install Docker and virtual controller components needed for simulation mode.
+
+Build the Package
+-----------------
+
+Before building, clean up previous artifacts (recommended):
 
 .. code-block:: bash
 
    cd ~/ros2_ws
+   rm -rf build/ install/ log/
+
+Then build the workspace:
+
+.. code-block:: bash
+
    colcon build
-   . install/setup.bash
+   source install/setup.bash
 
 .. note::
-   To use **ROS2 with Version 3.x Controller**, specify the build option:
+   To use ROS2 with Version 3.x Controller, specify the build option:
+
 
    .. code-block:: bash
 
       colcon build --cmake-args -DDRCF_VER=3
 
 
-Need to add the ``PYTHONPATH`` of the repo to your ``.bashrc``:
+Post-installation: PYTHONPATH
+-----------------------------
 
-   .. code-block:: bash
+Add the Python module path to your shell:
 
-      echo 'export PYTHONPATH=$PYTHONPATH:~/ros2_ws/install/dsr_common2/lib/dsr_common2/imp' >> ~/.bashrc && source ~/.bashrc
+.. code-block:: bash
 
+   echo 'export PYTHONPATH=$PYTHONPATH:~/ros2_ws/install/dsr_common2/lib/dsr_common2/imp' >> ~/.bashrc
+   source ~/.bashrc
 
-Try to test the installation by running the following command:
+Test the Installation
+---------------------
 
-   .. code-block:: bash
+To verify your setup, launch the RViz2 demo:
 
-      ros2 launch dsr_bringup2 dsr_bringup2_rviz.launch.py
+.. code-block:: bash
+
+   ros2 launch dsr_bringup2 dsr_bringup2_rviz.launch.py

@@ -2,70 +2,88 @@
 
 Operation Modes
 ===============
-This section describes the operation modes available for the Doosan robot system.
 
+This section describes the operation modes available for the Doosan robot system.
 
 **Virtual Mode**
 ----------------
 
-If you are driving without a real robot, use virtual mode. (Need Docker)
+Use virtual mode when operating without a physical robot. (**Docker is required**)
 
-Selecting virtual mode sets the mode argument to virtual when running the dsr_bringup2 launch file. If you omit the argument, it defaults to virtual.
+If you omit the ``mode`` argument, it defaults to ``virtual``.
 
 .. code-block:: bash
 
-  ros2 launch dsr_bringup2 dsr_bringup2_gazebo.launch.py mode:=virtual
+   ros2 launch dsr_bringup2 dsr_bringup2_gazebo.launch.py mode:=virtual
 
-When ROS2 launches in virtual mode, the **emulator(DRCF)** runs automatically.
+When launched in virtual mode, the **emulator (DRCF)** will automatically start and stop during the launch lifecycle.
 
 .. note::
-  DRCF location: ``dsr_common2/bin/``
+   - Emulator location: ``dsr_common2/bin/``
+   - One emulator instance will be launched for each robot.
+   - The system automatically assigns different ports for multiple robots.
 
-One emulator is required for each robot.
-
-When controlling multiple robots, the emulator will automatically run as many as the number of robots and use different ports.
-
-**Real Mode**
-----------------
-
-Use real mode to drive a real robot.
-
-In real mode operation, communication must be established with the real robot controller.
-
-The default IP of the robot controller is ``192.168.137.100`` and the port is ``12345``.
-
-  Selecting arguments(``mode:=real host:=192.168.137.100 port:=12345``) to real mode when running the dsr_bringup2 launch file.
+To check if the emulator is running correctly:
 
 .. code-block:: bash
 
-    ros2 launch dsr_bringup2 dsr_bringup2_gazebo.launch.py mode:=real host:=192.168.137.100 port:=12345
+   ps -ef | grep drcf
+   docker ps   # If emulator runs in Docker container
+
+**Real Mode**
+-------------
+
+Use real mode when controlling an actual robot.
+
+In real mode, the system communicates with the physical robot controller over TCP/IP.
+
+- Default IP: ``192.168.137.100`` |br| 
+- Default Port: ``12345``
+
+Pass the following arguments to launch in real mode:
+
+.. code-block:: bash
+
+   ros2 launch dsr_bringup2 dsr_bringup2_gazebo.launch.py mode:=real host:=192.168.137.100 port:=12345
+
+.. note::
+  Make sure your PC is connected to the **same subnet** as the robot controller. |br|
+  (e.g., PC IP: ``192.168.137.X``)
+
+**Connect with the Real Robot Controller**
+
+- Turn on the robot and check the **Teach Pendant** screen.
+
+.. image:: images/etc/teach_pendant_screen.png
+   :alt: Teach Pendant Main Screen
+   :width: 800px
+   :align: center
+
+.. raw:: html
+
+   <br><br>
+
+- Navigate to ``Settings → Network`` and confirm the controller IP.
+
+.. image:: images/etc/network_of_tp_screen.png
+   :alt: Network Settings on TP
+   :width: 800px
+   :align: center
+
+.. raw:: html
+
+   <br><br>
+
+- Use this IP address as the ``host`` argument in your launch command. |br|
+
+- If the ROS 2 control node is running successfully, the control will transfer from the TP to ROS 2.
+
+- A pop-up will appear on the TP confirming the transfer of control to ROS 2.
 
 
-Connect with real robot controller
-~~~~~~~~
+.. image:: images/etc/transfer_control_pop_up.png
+   :alt: Control Transfer Pop-up
+   :width: 800px
+   :align: center
 
-Turn on the robot and look at TP(Teach Pandaunt) screen.
 
-.. image:: ../_static/tutorial/teach_pandaunt_screen.png
-     :alt: Robot Model Preview
-     :width: 800px
-     :align: center
-
-The user can set static IP in Setting -> Network of TP screen.
-
-.. image:: ../_static/tutorial/network_of_tp_screen.png
-     :alt: Robot Model Preview
-     :width: 800px
-     :align: center
-
-Check the IP of the controller set in the Network tab, and set this IP in the command.
-(host := ROBOT_IP)
-
-If the ROS2 control node is correctly executed, the control is now transfer from TP to ROS2.
-
-.. image:: ../_static/tutorial/transfer_control_pop_up.png
-     :alt: Robot Model Preview
-     :width: 800px
-     :align: center
-
-If successful, a pop-up message will appear on the TP screen.

@@ -9,7 +9,7 @@ This architecture illustrates the data flow between the user command, controller
 
    <br><br>
 
-.. image:: architecture2.png
+.. image:: images/architecture2.png
    :alt: Doosan ROS 2 Architecture
    :width: 100%
    :align: center
@@ -118,10 +118,6 @@ Key features:
 - Supports both **real** and **virtual** robot modes
 - Implements the required `read()` and `write()` methods for hardware synchronization
 
-.. note::
-
-   The Doosan robot integration follows a **System-only model** in ROS 2 control.  
-   There are no separate Sensor or Actuator components.
 
 
 

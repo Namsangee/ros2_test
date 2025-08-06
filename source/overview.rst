@@ -24,9 +24,8 @@ Features
 
 .. raw:: html
 
-   <br><br>
-
-
+   <br>
+   
 - Pre-configured launch files for RViz2, Gazebo, and MoveIt 2
 - MoveIt 2 integration for motion planning and manipulation tasks
 - Gazebo Harmonic simulation support for dynamic testing and validation
@@ -34,8 +33,7 @@ Features
 
 .. raw:: html
 
-   <br><br>
-
+   <br>
 
 - Includes sample applications and demo scripts for quick setup and usage
 
@@ -51,4 +49,3 @@ License
 -------
 All packages are distributed under the **Apache License 2.0**.  
 See the LICENSE file for details.
-
