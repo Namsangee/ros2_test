@@ -1,11 +1,11 @@
 .. _faq_index:
 
-Frequently Asked Questions
+FAQ
 ==========================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: FAQ Topics
+   :maxdepth: 1
+   :caption: Frequent Asked Questions
 
    ament_prefix_path
    dr_init

@@ -1,5 +1,11 @@
 .. _moveit_tutorial:
 
+.. image:: MoveIt_Jazzy.jpg
+   :alt: MoveIt 2 Logo
+   :height: 150px
+   :align: right
+
+
 MoveIt 2 Integration
 ====================
 
@@ -9,7 +15,10 @@ MoveIt 2 enables motion planning, collision checking, and interactive manipulati
 
    MoveIt 2 integration requires **Doosan Controller firmware version 2.12 or higher**.
 
-To launch the MoveIt 2 interface, use the following command:
+
+
+command
+---------
 
 .. code-block:: bash
 

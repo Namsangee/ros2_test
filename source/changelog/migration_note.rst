@@ -1,4 +1,4 @@
-.. _changelog:
+.. _migration_note:
 
 Changelog
 =========
