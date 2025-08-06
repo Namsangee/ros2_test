@@ -54,7 +54,7 @@ To ensure proper launch and connection, the ``mode`` and ``host`` arguments shou
 
 
   .. raw:: html
-      
+
       <br>
       <br>
 
