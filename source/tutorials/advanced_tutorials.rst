@@ -6,4 +6,4 @@ Advanced Tutorials
    :maxdepth: 1
    :caption: Advanced Tutorials:
 
-   advanced_tutorials/DRFL_tutorial
+   advanced_tutorials/DSR_ROBOT_tutorial
