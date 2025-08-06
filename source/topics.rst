@@ -3,7 +3,7 @@
 Topics
 ******
 
-This section describes the various ROS2 Topics used in the Doosan Robotics package.
+This section describes the various ROS2 Topics used in the Doosan Robotics package, detailing the structure of their messages.
 
 .. contents::
    :depth: 2
