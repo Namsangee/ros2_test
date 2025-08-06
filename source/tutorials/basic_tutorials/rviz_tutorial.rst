@@ -25,7 +25,7 @@ Examples
 ----------
 
 Launch
-~~~~~~~~
+~~~~~~~~~~
 
 To ensure proper launch and connection, the ``mode`` and ``host`` arguments should be configured accordingly.
 
@@ -53,7 +53,7 @@ To ensure proper launch and connection, the ``mode`` and ``host`` arguments shou
      :align: center
 
 
-   .. raw:: html
+  .. raw:: html
       
       <br>
       <br>
@@ -82,7 +82,7 @@ To ensure proper launch and connection, the ``mode`` and ``host`` arguments shou
      You can check robot models in ``dsr_description2`` package
 
 Example move
-~~~~~~~~
+~~~~~~~~~~~~
 
 Once RViz2 is running, you can test the setup by executing a simple motion script.
 
@@ -98,3 +98,18 @@ Open a new terminal and run the following command:
      :align: center
 
 Example scripts are available in ``dsr_example2`` package.
+
+Or you can directly move the robot by calling a service or topic :
+
+.. code-block:: bash
+
+    ros2 service call /dsr01/motion/move_joint dsr_msgs2/srv/MoveJoint "{
+         pos: [0.0, 0.0, 90.0, 0.0, 90.0, 0.0],
+         vel: 100.0,
+         acc: 100.0,
+         time: 2.0,
+         mode: 0,
+         radius: 0.0,
+         blend_type: 0,
+         sync_type: 0
+         }"
