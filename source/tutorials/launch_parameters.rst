@@ -30,10 +30,13 @@ Defines whether the robot runs in physical or virtual mode.
 The emulator will start and stop automatically during the launch lifecycle.
 
 
+For more information about the ``mode`` argument, see :ref:`operation_modes`.
+
+
 **name**
 --------
 
-Specifies the namespace assigned to the robot.  
+Sets the ROS namespace used for the robot.
 
 - Default: ``dsr01``
 
