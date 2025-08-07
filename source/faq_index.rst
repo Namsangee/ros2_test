@@ -7,5 +7,5 @@ FAQ
    :maxdepth: 1
    :caption: Frequent Asked Questions
 
-   ament_prefix_path
-   dr_init
+   faq/ament_prefix_path
+   faq/dr_init

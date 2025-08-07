@@ -6,7 +6,7 @@ OSS Notice
 **1. Notice that the software provided by Doosan Robotics OSS includes the following OSS licenses.** `(Details) <https://ddddppddrrpubblobstr01.blob.core.windows.net/upload/OSS%20Notice%20for%20Doosan%20Robotics_M2.4.html>`_
 
 
-(1) Apache License 2.0 (`Modifications <_static/policy/Modified_OSS_Apache_License_2.0_20190624.txt>`_)
+(1) Apache License 2.0 (`Modifications <policy/Modified_OSS_Apache_License_2.0_20190624.txt>`_)
 
 (2) Boost Software License 1.0
 

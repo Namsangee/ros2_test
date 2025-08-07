@@ -5,8 +5,7 @@ MoveIt 2 Dynamic YAML Launch Option
 
 .. contents::
    :local:
-   :depth: 2
-   :hidden:
+   :depth: 1
 
 Overview
 --------
@@ -38,7 +37,7 @@ With **dynamic YAML**, this is handled automatically based on the URDF.
 
    <br><br>
 
-Command and Arguments
+Command 
 ---------------
 
 .. code-block:: bash
@@ -46,6 +45,7 @@ Command and Arguments
    ros2 launch dsr_bringup2 dsr_bringup2_moveit.launch.py [arguments]
 
 Arguments
+----------
 
   - ``mode``: Operation mode (``real`` or ``virtual``)
   - ``model``: Robot model name (e.g., ``m1013``, ``a0509``, ``p3020``)
@@ -111,17 +111,6 @@ This will:
 .. raw:: html
 
    <br><br>
-
-How It Works
-------------
-
-1. The launch file reads `model`, `color`, and `dynamic_yaml` arguments.
-2. The robot’s URDF (converted from xacro) is parsed to identify active and passive joints.
-3. Based on the `dynamic_yaml` flag:
-   - If `true`, a temporary `controller.yaml` is auto-generated with correct joint names.
-   - If `false`, the system tries to load an existing YAML file for the specific model.
-4. The final configuration is passed to `ros2_control_node`.
-
 
 .. raw:: html
 

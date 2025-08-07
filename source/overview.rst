@@ -22,18 +22,12 @@ Features
 - Integrated DRFL (Doosan Robot Framework Library) for direct command-level access
 - Optional real-time control interface for low-latency communication
 
-.. raw:: html
-
-   <br>
    
 - Pre-configured launch files for RViz2, Gazebo, and MoveIt 2
 - MoveIt 2 integration for motion planning and manipulation tasks
 - Gazebo Harmonic simulation support for dynamic testing and validation
 - RViz2-based robot state visualization and planning preview
 
-.. raw:: html
-
-   <br>
 
 - Includes sample applications and demo scripts for quick setup and usage
 

@@ -1,6 +1,6 @@
 .. _moveit_tutorial:
 
-.. image:: MoveIt_Jazzy.jpg
+.. image:: ../images/moveit/MoveIt_Jazzy.jpg
    :alt: MoveIt 2 Logo
    :height: 150px
    :align: right

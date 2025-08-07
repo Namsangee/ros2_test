@@ -8,6 +8,10 @@ Additional Resources
    :caption: reference resource or pages:
 
    python_api
-   p3020_detailed_guide`
+   p3020_detailed_guide
 
-*   `Demo Video <https://github.com/user-attachments/assets/bd91aea0-b8b6-4ce1-9040-9ab06630edbe>`_
+
+External Links
+--------------
+
+- `Demo Video <https://github.com/user-attachments/assets/bd91aea0-b8b6-4ce1-9040-9ab06630edbe>`_

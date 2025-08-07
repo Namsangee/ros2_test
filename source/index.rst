@@ -11,9 +11,9 @@ Welcome to Manual's documentation!
    topics
    services
    additional_resources
+   changelog_index
+   faq_index
    policy_and_notice
-   changelog/changelog_index
-   faq/faq_index
 
 Indices and tables
 ==================

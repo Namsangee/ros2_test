@@ -1,5 +1,10 @@
 .. _gazebo_tutorial:
 
+.. image:: ../images/gazebo/gazebo_harmonic.jpeg
+   :alt: MoveIt 2 Logo
+   :height: 150px
+   :align: right
+
 Gazebo Simulation
 =================
 

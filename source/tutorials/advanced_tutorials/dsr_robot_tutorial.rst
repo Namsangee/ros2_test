@@ -134,15 +134,6 @@ to accommodate different application needs. |br|
 Or the current function list below:
 :ref:`Full Python API Reference <python_api>`
 
-How It Works
-------------
-
-1. The robot ID and model are passed via `DR_init`.
-2. A ROS 2 node is initialized and passed to the DSR interface.
-3. Movement functions are called (e.g., `movej(p1)`), which are:
-   - Sent via topics/services to the `dsr_controller2` node.
-   - Translated to native robot commands (DRFL → DRCF).
-4. The robot executes the requested motion.
 
 References
 ----------

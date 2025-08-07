@@ -5,13 +5,15 @@ RViz2 Launch
 
 This launch file starts Rviz2 for visualizing the robot model and its state.
 
-**Command:**
+Command
+--------
 
 .. code-block:: bash
 
    ros2 launch dsr_bringup2 dsr_bringup2_rviz.launch.py [arguments]
 
-**Arguments:**
+Arguments
+----------
 
 - ``mode``: Robot operation mode. Choose between:
   
@@ -47,7 +49,7 @@ To ensure proper launch and connection, the ``mode`` and ``host`` arguments shou
 
      ros2 launch dsr_bringup2 dsr_bringup2_rviz.launch.py mode:=virtual host:=127.0.0.1 model:=m1013
 
-  .. image:: ../../_static/tutorial/rviz1.png
+  .. image:: ../images/rviz/rviz1.png
      :alt: Robot Model Preview
      :width: 800px
      :align: center
@@ -60,7 +62,7 @@ To ensure proper launch and connection, the ``mode`` and ``host`` arguments shou
 
 - Launch with different model and configurations:
 
-  .. image:: ../../_static/tutorial/m0609_launch_rviz2.png
+  .. image:: ../images/rviz/m0609_launch_rviz2.png
      :alt: Robot Model Preview
      :width: 800px
      :align: center
@@ -69,7 +71,7 @@ To ensure proper launch and connection, the ``mode`` and ``host`` arguments shou
 
      ros2 launch dsr_bringup2 dsr_bringup2_rviz.launch.py mode:=virtual host:=127.0.0.1 model:=m0609
 
-  .. image:: ../../_static/tutorial/h2017_launch_rviz2.png
+  .. image:: ../images/rviz/h2017_launch_rviz2.png
      :alt: Robot Model Preview
      :width: 800px
      :align: center
@@ -92,7 +94,7 @@ Open a new terminal and run the following command:
 
     ros2 run dsr_example single_robot_simple
 
-.. image:: ../../_static/tutorial/rviz2.png
+.. image:: ../images/rviz/rviz2.png
      :alt: Robot Model Preview
      :width: 800px
      :align: center
@@ -114,7 +116,7 @@ Or you can directly move the robot by calling a service or topic :
          sync_type: 0
          }"
 
-.. image:: rviz2_launch_service_call.gif
+.. image:: ../images/rviz/rviz2_launch_service_call.gif
    :alt: MoveIt Motion Execution
    :width: 100%
    :align: center
