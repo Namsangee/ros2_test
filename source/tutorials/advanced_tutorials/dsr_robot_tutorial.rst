@@ -5,8 +5,8 @@ DSR_ROBOT2 Library Tutorial
 
 .. contents::
    :local:
-   :depth: 2
-   :hidden:
+   :depth: 1
+
 
 Overview
 --------

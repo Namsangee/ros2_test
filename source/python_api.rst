@@ -1,6 +1,6 @@
 .. _python_api:
 
-Pyhon API
+Python API
 =========
 
 
