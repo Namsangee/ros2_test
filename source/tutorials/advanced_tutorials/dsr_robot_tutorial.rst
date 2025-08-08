@@ -27,10 +27,10 @@ The architecture is composed of the following layers:
    :width: 100%
    :align: center
 
-- **DSR_ROBOT2** (Python Interface): Publishes commands via ROS 2 topics and interacts with the controller using services.
-- **dsr_controller2**: A bridge node that translates ROS 2 commands into calls to the native robot control library (DRFL).
-- **DRFL** (Doosan Robot Framework Library): C++ API for communicating with the robot controller software (DRCF).
-- **DRCF** (Doosan Robot Control Framework): The low-level controller running on the robot or emulator.
+- **DSR_ROBOT2** (Python Interface): Publishes commands via ROS 2 topics/services and interacts with `dsr_controller2`.
+- **dsr_controller2**: Translates ROS 2 service and topic commands into calls to the native robot control library (DRFL).
+- **DRFL** (Doosan Robotics Framework Library): C++ API for communicating with the robot controller software (DRCF).
+- **DRCF** (Doosan Robot Controller Framework): The low-level controller running on the robot or emulator.
 
 Setup and Launch
 ----------------

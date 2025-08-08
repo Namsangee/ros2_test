@@ -101,8 +101,13 @@ You can spawn multiple robots in Gazebo for **multi-arm coordination** and visua
    :width: 100%
    :align: center
 
+.. raw:: html
+
+   <br>
+   <br>
+   
 References
 ----------
 
-- `Gazebo Tutorials <https://gazebosim.org/tutorials>`_
+- `Gazebo Tutorials <https://gazebosim.org/docs/harmonic/tutorials/>`_
 - `Doosan ROS2 Manual <https://manual.doosanrobotics.com/en/ros/>`_

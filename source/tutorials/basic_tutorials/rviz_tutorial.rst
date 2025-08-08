@@ -99,7 +99,9 @@ Open a new terminal and run the following command:
      :width: 800px
      :align: center
 
-Example scripts are available in ``dsr_example2`` package.
+.. note::
+   
+      Example scripts are available in ``dsr_example2`` package.
 
 Or you can directly move the robot by calling a service or topic :
 

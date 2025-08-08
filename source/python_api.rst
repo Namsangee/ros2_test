@@ -8,7 +8,10 @@ This page provides a categorized overview of available Python API functions for 
 
 The functions are grouped by their purpose—such as motion control, auxiliary functions, force control, I/O operations, DRL execution, and real-time streaming—so developers can quickly find and utilize the appropriate commands in their applications.
 
-Each function listed here can be called through the `DR_init` module, and most require that the robot be properly connected and initialized.
+Each function listed here can be imported by ``DSR_ROBOT2`` in a ROS2 node, and most require that the robot be properly connected and state in the correct mode.
+
+Refer to :ref:`DSR_ROBOT2 library tutorial <dsr_robot_tutorial>` for usage.
+
 
 .. list-table::
    :widths: 30 80
