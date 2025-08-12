@@ -1,7 +1,7 @@
 .. _python_api:
 
 Python API
-=========
+==========
 
 
 This page provides a categorized overview of available Python API functions for controlling and monitoring Doosan Robots in ROS 2 environments.

@@ -12,6 +12,14 @@ Please ensure you have a working ROS 2 Jazzy installation by following the `offi
 To utilize the **emulator in virtual mode**, **Docker** is required.  
 Install Docker by following the `Docker official installation guide for Ubuntu <https://docs.docker.com/engine/install/ubuntu/>`_.
 
+.. note::
+
+   **Environment Specifications** |br|
+   - OS: Ubuntu 24.04 LTS |br|
+   - ROS 2: Jazzy Jalisco |br|
+   - Language: Python ≥ 3.10, C++17 |br|
+
+
 Required Dependencies
 ---------------------
 
@@ -31,6 +39,7 @@ Install Gazebo Simulator support:
 .. code-block:: bash
 
    sudo apt install -y ros-jazzy-ros-gz ros-jazzy-gz-ros2-control
+
 
 Workspace & Package Setup
 --------------------------
