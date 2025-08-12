@@ -10,18 +10,18 @@ dsr_bringup2
 ~~~~~~~~~~~~
 Launch management package for starting real or virtual robots.  
 Includes integrated launch files for RViz2, MoveIt 2, and Gazebo.  
-Supports configurable arguments (e.g., `mode`, `model`, `host`, `port`) for flexible deployment.
+Supports configurable launch arguments (e.g., `mode`, `model`, `host`, `port`) for flexible deployment.
 
 dsr_common2
-~~~~~~~~~~~~
+~~~~~~~~~~~
 Provides shared utilities and communication layers across all Doosan packages.  
 Integrates the Doosan Robot Framework Library (DRFL) for command-level control, I/O access, and state monitoring.  
-Also includes service callbacks, namespace tools, and logging support.
+Also includes service callbacks, namespace utilities, and logging support.
 
 dsr_controller2
 ~~~~~~~~~~~~~~~
-Defines custom ROS 2 controllers (`dsr_controller2`, `dsr_joint_trajectory`, etc.) using the `ControllerInterface`.  
-Acts as a bridge between ROS 2 control logic and Doosan's native DRFL command interface.
+Defines custom ROS 2 controllers (`dsr_controller2`, `dsr_joint_trajectory`, etc.) using `ControllerInterface`.  
+Acts as a bridge between ROS 2 control logic and Doosan’s native DRFL command interface.
 
 dsr_description2
 ~~~~~~~~~~~~~~~~
@@ -31,7 +31,7 @@ Required for RViz2 visualization, MoveIt 2 planning, and simulation environments
 dsr_example2
 ~~~~~~~~~~~~
 Includes Python and C++ sample scripts demonstrating motion commands, tool usage, and error handling.  
-Useful for learning DRFL workflows and API structure.
+Useful for learning DRFL workflows and API usage.
 
 dsr_hardware2
 ~~~~~~~~~~~~~
@@ -50,8 +50,8 @@ Supports continuous integration and system validation with MoveIt 2 or Gazebo.
 
 dsr_moveit_config_{model}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-Auto-generated MoveIt 2 configuration packages per robot model.  
-Includes planning pipeline setup, controller configs, kinematics plugins, OMPL settings, and RViz2 presets.
+Auto-generated MoveIt 2 configuration packages for each robot model.  
+Includes planning pipeline setup, controller configurations, kinematics plugins, OMPL settings, and RViz2 presets.
 
 dsr_gazebo2
 ~~~~~~~~~~~

@@ -1,7 +1,7 @@
 .. _migration_note:
 
-Changelog
-=========
+Migration fr9m Humble to Jazzy
+===============================
 
 This document summarizes the changes applied during the migration from **ROS 2 Humble** to **ROS 2 Jazzy**.  
 For detailed code-level differences, please refer to each component section below.
@@ -136,6 +136,7 @@ QoS Changes
      node->create_subscription<MsgType>("topic", qos, callback);
 
 - Default policy updates (some topics):
+
   - `reliable` → `best_effort`
   - `transient_local` → `volatile`
 

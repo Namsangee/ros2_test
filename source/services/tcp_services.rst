@@ -7,10 +7,14 @@ tcp Services
    :depth: 1
    :local:
 
+.. _ConfigCreateTcp:
+
 ConfigCreateTcp
 ---------------
 
-It is a service for registering and using robot TCP information in advance for safety.
+This is a service to register and use robot TCP information in advance for safety. 
+TCP information registered using this service is stored in memory, so it must be set again after rebooting. 
+if it is registered in the T/P application, it can be reused as it is added during the initialization process.
 
 **Request:**
 
@@ -24,6 +28,8 @@ It is a service for registering and using robot TCP information in advance for s
 .. code-block::
 
    bool success
+
+.. _ConfigDeleteTcp:
 
 ConfigDeleteTcp
 ---------------
@@ -45,11 +51,13 @@ It is a service for deleting the TCP information registered in advance in the ro
 GetCurrentTcp
 -------------
 
-It is the service to get the currently set TCP information from the robot controller.
+It is a service that fetches the currently set TCP information from the robot controller.
 
 **Request:**
 
-(None)
+.. code-block::
+
+   (None)
 
 **Response:**
 
@@ -57,6 +65,8 @@ It is the service to get the currently set TCP information from the robot contro
 
    string         info # tcp name
    bool        success
+
+.. _SetCurrentTcp:
 
 SetCurrentTcp
 -------------

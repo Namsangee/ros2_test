@@ -5,38 +5,38 @@
    :height: 150px
    :align: right
 
-
-MoveIt 2 Integration
+MoveIt2 Integration
 ====================
 
-MoveIt 2 enables motion planning, collision checking, and interactive manipulation for Doosan robots using the ROS 2 control stack.
+MoveIt 2 provides motion planning, collision checking, and interactive manipulation capabilities for Doosan robots using the ROS 2 control stack.
 
 .. note::
 
-   MoveIt 2 integration requires **Doosan Controller firmware version 2.12 or higher**.
+   MoveIt 2 integration requires the following minimum Doosan Controller firmware versions:
 
+   - **Firmware 2.x**: Version **2.12** or higher
+   - **Firmware 3.x**: Version **3.4** or higher
 
-
-command
----------
+Command
+-------
 
 .. code-block:: bash
 
    ros2 launch dsr_bringup2 dsr_bringup2_moveit.launch.py [arguments]
 
 Arguments
-----------------
+---------
 
-- ``mode``: Robot operation mode. Choose between:
+- ``mode``: Robot operation mode. Options:
   
-  - ``real``: Connect to physical Doosan robot.
-  - ``virtual``: Run in simulator/emulator mode.
+  - ``real``: Connect to a physical Doosan robot.
+  - ``virtual``: Run in simulator or emulator mode.
   
-- ``model``: Robot model name (e.g., ``m1013``, ``a0509``, etc.)
+- ``model``: Robot model name (e.g., ``m1013``, ``a0509``)
 - ``host``: IP address of the robot controller (real mode) or emulator (virtual mode)
 
 Examples
---------------
+--------
 
 **Real Mode (Physical Robot)**
 
@@ -50,10 +50,10 @@ Examples
 
    ros2 launch dsr_bringup2 dsr_bringup2_moveit.launch.py mode:=virtual model:=m1013 host:=127.0.0.1
 
-This will launch:
+Launching this command will start:
 
 - RViz 2 with the robot model and planning scene
-- Move Group (Motion planning backend)
+- Move Group (motion planning backend)
 - Joint trajectory controller
 - Robot state publisher and static transforms
 
@@ -71,9 +71,9 @@ This will launch:
    <br><br>
 
 Motion Execution Demo
------------------------
+---------------------
 
-The following animation demonstrates a typical pick-and-place motion planned and executed using MoveIt 2:
+The animation below demonstrates motion execution using MoveIt 2:
 
 .. image:: ../images/moveit/moveit.gif
    :alt: MoveIt Motion Execution
@@ -84,4 +84,4 @@ The following animation demonstrates a typical pick-and-place motion planned and
 
    <br><br>
 
-For further customization or troubleshooting, see the corresponding launch files in the ``dsr_bringup2`` and ``dsr_moveit_config_{model}`` packages.
+For additional customization or troubleshooting, refer to the launch files in the ``dsr_bringup2`` and ``dsr_moveit_config_{model}`` packages.

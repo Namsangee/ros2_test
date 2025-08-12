@@ -11,6 +11,9 @@ force Services
 
 AlignAxis1
 ----------
+This service matches the normal vector of the plane consists of points(x1, x2, x3) 
+based on the ref coordinate(refer to get_normal(x1, x2, x3)) and the designated axis of the tool frame. 
+The current position is maintained as the TCP position of the robot.
 
 **Request:**
 
@@ -22,7 +25,7 @@ AlignAxis1
    float64[3] source_vect       # source vector[3]  
    int8       axis              # DR_AXIS_X(0), DR_AXIS_Y(1), DR_AXIS_Z(2) 
    int8       ref               # DR_BASE(0), DR_WORLD(2), user coord(101~200)
-                             # <ref is only available in M2.40 or later> 
+                                # <ref is only available in M2.40 or later> 
 
 **Response:**
 
@@ -34,6 +37,8 @@ AlignAxis1
 
 AlignAxis2
 ----------
+This service matches the given vect direction based on the ref coordinate and the designated axis of the tool frame. 
+The current position is maintained as the TCP position of the robot.
 
 **Request:**
 
@@ -43,7 +48,7 @@ AlignAxis2
    float64[3] source_vect       # source vector[3]  
    int8       axis              # DR_AXIS_X(0), DR_AXIS_Y(1), DR_AXIS_Z(2) 
    int8       ref               # DR_BASE(0), DR_WORLD(2), user coord(101~200)
-                             # <ref is only available in M2.40 or later> 
+                                # <ref is only available in M2.40 or later> 
 
 **Response:**
 
@@ -56,7 +61,23 @@ AlignAxis2
 CalcCoord
 ---------
 
-This service is only available in M2.50 or later
+This service is only available in M2.50 or later.
+
+- **1 pose**: Defined by the position and orientation of x1.
+- **2 poses + mode 0**:
+  - X-axis: direction from x1 to x2
+  - Z-axis: projection of current Tool-Z onto the plane orthogonal to the X-axis
+  - Origin: position of x1
+- **2 poses + mode 1**:
+  - X-axis: direction from x1 to x2
+  - Z-axis: projection of x1’s Z-axis onto the plane orthogonal to the X-axis
+  - Origin: position of x1
+- **3 poses**:
+  - X-axis: direction from x1 to x2
+  - Z-axis: cross product of X-axis and (x1→x3)
+  - Origin: position of x1
+- **4 poses**: Same axis definition as with 3 poses, but origin is the position of x4.
+
 
 **Request:**
 
@@ -69,8 +90,8 @@ This service is only available in M2.50 or later
    float64[6] x4                # task pos(posx)
    int8       ref               # DR_BASE(0), DR_WORLD(2)
    int8       mod               # input mode(only valid when the number of input poses is 2)
-                             # 0: defining z-axis based on the current Tool-z direction
-                             # 1: defining z-axis based on the z direction of x1 
+                                # 0: defining z-axis based on the current Tool-z direction
+                                # 1: defining z-axis based on the z direction of x1 
 
 **Response:**
 
@@ -97,7 +118,7 @@ axis is based on the tool coordinate.
    float64    min               # min >=0.0   
    float64    max               # max >=0.0 
    int8       ref     #= 0      # DR_BASE(0), DR_TOOL(1), DR_WORLD(2), user coord(101~200)
-                             # <DR_WORLD is only available in M2.40 or later> 
+                                # <DR_WORLD is only available in M2.40 or later> 
 
 **Response:**
 
@@ -110,6 +131,20 @@ axis is based on the tool coordinate.
 
 CheckOrientationCondition1
 --------------------------
+This service compares the robot end-effector’s current pose with a specified pose and returns the angular difference (in radians) using the **AngleAxis** method.
+
+- Returns True if the difference is positive (+), False if the difference is negative (−).
+- Used to check the sign of the difference for orientation limit conditions (e.g., in ``while`` or ``if`` statements).
+
+**Conditions:**
+- **Min only**: True if the difference is positive (+), False if negative (−).
+- **Min & Max**: True if the difference from min is negative (−) and from max is positive (+), False otherwise.
+- **Max only**: True if the difference from max is positive (+), False otherwise.
+
+.. image:: images/checkorientationcondition1.png
+   :alt: ROS2 Interface
+   :width: 80%
+   :align: center
 
 **Request:**
 
@@ -119,7 +154,7 @@ CheckOrientationCondition1
    float64[6] min               # task pos(posx)  
    float64[6] max               # task pos(posx)  
    int8       ref  #= 0         # DR_BASE(0), DR_TOOL(1), DR_WORLD(2), user_coordinate(101~200)
-                             # <DR_WORLD is only available in M2.40 or later> 
+                                # <DR_WORLD is only available in M2.40 or later> 
    int8       mode #= 0         # DR_MV_MOD_ABS(0)
 
 **Response:**
@@ -132,6 +167,28 @@ CheckOrientationCondition1
 
 CheckOrientationCondition2
 --------------------------
+This service compares the robot end-effector's current pose with a defined rotation angle range and calculates the difference (in radians) using the **AngleAxis** method.
+
+**Return Value:**
+
+- ``True`` if the difference is positive (+)
+- ``False`` if the difference is negative (-)
+
+**Usage:**
+
+This service can be used to determine whether the current pose is within an orientation limit.  
+It can be incorporated into conditional statements such as ``while`` or ``if``.
+
+**Conditions:**
+
+- **Min only**: Returns ``True`` if the difference is positive (+), otherwise ``False``.
+- **Min & Max**: Returns ``True`` if the difference from *min* is negative (-) **and** the difference from *max* is positive (+), otherwise ``False``.
+- **Max only**: Returns ``True`` if the difference from *max* is positive (+), otherwise ``False``.
+
+.. image:: images/checkorientationcondition2.png
+   :alt: ROS2 Interface
+   :width: 80%
+   :align: center
 
 **Request:**
 
@@ -141,7 +198,7 @@ CheckOrientationCondition2
    float64    min               # minimum value  
    float64    max               # maximum value  
    int8       ref  #= 0         # DR_BASE(0), DR_TOOL(1), DR_WORLD(2), user_coordinate(101~200)
-                             # <DR_WORLD is only available in M2.40 or later> 
+                                # <DR_WORLD is only available in M2.40 or later> 
    int8       mode #= 1         # DR_MV_MOD_REL(1)
    float64[6] pos               # task pos(pos)  
 
@@ -151,10 +208,17 @@ CheckOrientationCondition2
 
    bool success                 # True or False
 
+.. note::
+   
+   Range of rotating angle: This means the relative angle range (min, max) based on the specified axis from a given position based on the ref coordinate.
+
+
 .. _CheckPositionCondition:
 
 CheckPositionCondition
 ----------------------
+This service checks the status of the given position. 
+This condition can be repeated with the while or if statement. Axis and pos of input paramets are based on the ref coordinate.
 
 **Request:**
 
@@ -164,7 +228,7 @@ CheckPositionCondition
    float64    min               # min    
    float64    max               # max  
    int8       ref     #= 0      # DR_BASE(0), DR_TOOL(1), DR_WORLD(2), user_coordinate(101~200)
-                             # <DR_WORLD is only available in M2.40 or later> 
+                                # <DR_WORLD is only available in M2.40 or later> 
    int8       mode #= 0         # DR_MV_MOD_ABS(0), DR_MV_MOD_REL(1) 
    float64[6] pos               # task pos(posx)  
 
@@ -179,6 +243,16 @@ CheckPositionCondition
 
 CoordTransform
 --------------
+This service converts a given task position from a source reference coordinate system (``ref_in``) to a target reference coordinate system (``ref_out``),  
+and returns the transformed task position.
+
+**Supported Transformations:**
+
++---------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
+| ref_in  | World | World | World | World | Base  | Base  | Base  | Tool  | Tool  | Tool  | Tool  | User  | User  | User  | User  |
++---------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
+| ref_out | World | Base  | Tool  | User  | Base  | Tool  | User  | World | Base  | Tool  | User  | World | Base  | Tool  | User  |
++---------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 
 **Request:**
 
@@ -186,9 +260,9 @@ CoordTransform
 
    float64[6] pos_in            # task pos(posx)  
    int8       ref_in            # DR_BASE(0), DR_TOOL(1), DR_WORLD(2), user coord(101~200)
-                             # <ref is only available in M2.40 or later> 
+                                # <ref is only available in M2.40 or later> 
    int8       ref_out           # DR_BASE(0), DR_TOOL(1), DR_WORLD(2), user coord(101~200) 
-                             # <ref is only available in M2.40 or later> 
+                                # <ref is only available in M2.40 or later> 
 
 **Response:**
 
@@ -203,6 +277,7 @@ GetUserCartCoord
 ----------------
 
 This service is only available in M2.50 or later
+This service returns the pose and reference coordinate system of the requested user coordinate system [id].
 
 **Request:**
 
@@ -222,10 +297,12 @@ This service is only available in M2.50 or later
 
 GetWorkpieceWeight
 ------------------
+This service measures and returns the weight of the workpiece.
 
 **Request:**
+.. code-block::
 
-(None)
+   (None)
 
 **Response:**
 
@@ -238,6 +315,7 @@ GetWorkpieceWeight
 
 IsDoneBoltTightening
 --------------------
+This service monitors the tightening torque of the tool and returns True if the set torque (m) is reached within the given time and False if the given time has passed.
 
 **Request:**
 
@@ -258,7 +336,8 @@ IsDoneBoltTightening
 OverwriteUserCartCoord
 ----------------------
 
-This service is only available in M2.50 or later
+This service is only available for M2.50 or later versions.  
+It changes the pose and reference coordinate system of the requested user coordinate system [id] with the given ``pos`` and ``ref``.
 
 **Request:**
 
@@ -273,13 +352,15 @@ This service is only available in M2.50 or later
 .. code-block::
 
    int8       id                # Successful coordinate setting, Set user coordinate ID (101 - 200)
-                             # (-1) Failed coordinate setting
+                                # (-1) Failed coordinate setting
    bool       success                             
 
 .. _ParallelAxis1:
 
 ParallelAxis1
 -------------
+This service matches the normal vector of the plane consists of points(x1, x2, x3) based on the ref coordinate(refer to get_normal(x1, x2, x3)) 
+and the designated axis of the tool frame. The current position is maintained as the TCP position of the robot.
 
 **Request:**
 
@@ -290,7 +371,7 @@ ParallelAxis1
    float64[6] x3                # task pos(posx)
    int8       axis              # DR_AXIS_X(0), DR_AXIS_Y(1), DR_AXIS_Z(2) 
    int8       ref        #= 0   # DR_BASE(0), DR_WORLD(2), user coord(101~200)
-                             # <ref is only available in M2.40 or later> 
+                                # <ref is only available in M2.40 or later> 
 
 **Response:**
 
@@ -302,6 +383,8 @@ ParallelAxis1
 
 ParallelAxis2
 -------------
+This service matches the given vect direction based on the ref coordinate and the designated axis of the tool frame. 
+The current position is maintained as the TCP position of the robot.
 
 **Request:**
 
@@ -310,7 +393,7 @@ ParallelAxis2
    float64[3] vect              # vector[3]  
    int8       axis              # DR_AXIS_X(0), DR_AXIS_Y(1), DR_AXIS_Z(2) 
    int8       ref        #= 0   # DR_BASE(0), DR_WORLD(2), user coord(101~200)
-                             # <ref is only available in M2.40 or later> 
+                                # <ref is only available in M2.40 or later> 
 
 **Response:**
 
@@ -322,10 +405,14 @@ ParallelAxis2
 
 ReleaseComplianceCtrl
 ---------------------
+This service releases the current compliance control and restores the robot to normal operation mode.
+
 
 **Request:**
 
-(None)
+.. code-block::
+
+   (None)
 
 **Response:**
 
@@ -337,6 +424,7 @@ ReleaseComplianceCtrl
 
 ReleaseForce
 ------------
+This service reduces the force control target value to 0 through the time value and returns the task space to adaptive control.
 
 **Request:**
 
@@ -355,11 +443,13 @@ ReleaseForce
 ResetWorkpieceWeight
 --------------------
 
-Initializes the weight data of the material to initialize the algorithm before measuring the weight of the material.
+This service resets the stored workpiece weight data, initializing the algorithm before a new weight measurement.
 
 **Request:**
 
-(None)
+.. code-block::
+
+   (None)
 
 **Response:**
 
@@ -371,6 +461,7 @@ Initializes the weight data of the material to initialize the algorithm before m
 
 SetDesiredForce
 ---------------
+This service defines the target force, direction, translation time, and mode for force control based on the global coordinate.
 
 **Request:**
 
@@ -381,7 +472,7 @@ SetDesiredForce
    int8       ref               # Reference coordinate of the coordinate to get
    float64    time # 0          # Transition time of target force to take effect (0 ~ 1.0 sec)
    int8       mod               # DR_FC_MOD_ABS(0): force control with absolute value, 
-                             # DR_FC_MOD_REL(1): force control with relative value to initial state (the instance when this function is called) 
+                                # DR_FC_MOD_REL(1): force control with relative value to initial state (the instance when this function is called) 
 
 **Response:**
 
@@ -393,6 +484,9 @@ SetDesiredForce
 
 SetStiffnessx
 -------------
+This service sets the stiffness value based on the global coordinate(refer to set_ref_coord()). 
+The linear transition from the current or default stiffness is performed during the time given as STX. 
+The user-defined ranges of the translational stiffness and rotational stiffness are 0-20000N/m and 0-400Nm/rad, respectively.
 
 **Request:**
 
@@ -413,13 +507,19 @@ SetStiffnessx
 SetUserCartCoord1
 -----------------
 
+This service sets a new user Cartesian coordinate system using the given input pose ``pos`` and reference coordinate system ``ref``.  
+Up to 20 user coordinate systems can be set, including those created within the Workcell Item.  
+Since the coordinate system set by this function is removed when the program is terminated,  
+it is recommended to set new coordinate systems within the Workcell Item for persistence.
+
+
 **Request:**
 
 .. code-block::
 
    float64[6] pos                # task pos(posx)  
    int8       ref                # DR_BASE(0), DR_WORLD(2)
-                              # <ref is only available in M2.40 or later> 
+                                 # <ref is only available in M2.40 or later> 
 
 **Response:**
 
@@ -432,6 +532,20 @@ SetUserCartCoord1
 
 SetUserCartCoord2
 -----------------
+This service defines a new rectangular coordinate system using points **x1**, **x2**, and **x3** based on a given reference coordinate system.
+
+**Axis Definition:**
+
+- **ux**: Unit vector from x1 to x2  
+  - *Before M2.0.2*: Unit vector from x2 to x1
+- **uy**: Unit vector representing the shortest distance from the line x1x2 to point x3
+- **uz**: Derived from the cross product of **ux** and **uy**
+- **Origin**: ``pos`` in the reference coordinate system
+
+**Limitations:**
+
+- Maximum of 20 coordinate systems can be stored.
+- If more than 20 are created, only the most recent 20 are retained.
 
 **Request:**
 
@@ -442,7 +556,7 @@ SetUserCartCoord2
    float64[6] x3                 # task pos(posx)
    float64[6] pos                # pos(posx)
    int8       ref                # DR_BASE(0), DR_WORLD(2)
-                              # <ref is only available in M2.40 or later> 
+                                 # <ref is only available in M2.40 or later> 
 
 **Response:**
 
@@ -453,8 +567,19 @@ SetUserCartCoord2
 
 .. _SetUserCartCoord3:
 
+
 SetUserCartCoord3
 -----------------
+This service defines a new rectangular coordinate system using vectors **u1** and **v1** based on a given reference coordinate system.
+
+**Definition:**
+- **Origin**: ``pos`` in the reference coordinate system
+- **X-axis**: Vector **u1**
+- **Y-axis**: Vector **v1**
+   
+   - If **u1** and **v1** are not orthogonal, a corrected vector **v1’** is used, which is perpendicular to **u1** on the plane defined by **u1** and **v1**
+
+- **Z-axis**: Determined by the cross product **u1 × v1**
 
 **Request:**
 
@@ -464,7 +589,7 @@ SetUserCartCoord3
    float64[3] v1                # Y-axis unit vector 
    float64[6] pos               # task pos(posx) 
    int8       ref               # DR_BASE(0), DR_WORLD(2)
-                             # <ref is only available in M2.40 or later> 
+                                # <ref is only available in M2.40 or later> 
 
 **Response:**
 
@@ -478,12 +603,15 @@ SetUserCartCoord3
 TaskComplianceCtrl
 ------------------
 
+This service begins task compliance control based on the preset reference coordinate system.
+
+
 **Request:**
 
 .. code-block::
 
    float64[6] stx               # Three translational stiffnesses + Three rotational stiffnesses
-                             # default  [3000, 3000, 3000, 200, 200, 200]
+                                # default  [3000, 3000, 3000, 200, 200, 200]
    int8       ref               # the preset reference coordinate system.
    float64    time              # Stiffness varying time [ 0 ~ 1.0 sec], Linear transition during the specified time 
 

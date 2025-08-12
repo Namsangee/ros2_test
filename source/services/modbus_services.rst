@@ -12,7 +12,8 @@ modbus Services
 ConfigCreateModbus
 ------------------
 
-This service registers the Modbus signal.
+This service registers the Modbus signal. The Modbus I/O must be set in the Teach Pendant I/O set-up menu. Use this command only for testing if it is difficult to use the Teach Pendant. 
+The Modbus menu is disabled in the Teach Pendant if it is set using this command.
 
 **Request:**
 
@@ -33,13 +34,17 @@ This service registers the Modbus signal.
 
    bool success
 
+.. note::
+   
+   The slaveid argument is only available for versions M2.40 and higher.
+
 .. _ConfigDeleteModbus:
 
 ConfigDeleteModbus
 ------------------
 
-This service deletes the Modbus I/O signal information 
-previously registered in the robot controller.
+This service deletes the registered Modbus signal. The Modbus I/O must be set in the Teach Pendant I/O set-up menu. Use this command only for testing if it is difficult to use the Teach Pendant. 
+The Modbus menu is disabled in the Teach Pendant if it is set using this command.
 
 **Request:**
 

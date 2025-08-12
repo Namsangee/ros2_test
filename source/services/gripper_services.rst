@@ -9,22 +9,6 @@ gripper Services
    
 .. _Robotiq2FClose:
 
-Robotiq2FClose
---------------
-
-Close the virtual Robotiq gripper.
-
-**Request:**
-
-(None)
-
-**Response:**
-
-.. code-block::
-
-   bool success
-
-.. _Robotiq2FMove:
 
 Robotiq2FMove
 -------------
@@ -45,6 +29,7 @@ Open or close the virtual Robotiq gripper by input value (width).
 
 .. _Robotiq2FOpen:
 
+
 Robotiq2FOpen
 -------------
 
@@ -52,7 +37,9 @@ Open the virtual Robotiq gripper.
 
 **Request:**
 
-(None)
+.. code-block::
+
+   (None)
 
 **Response:**
 
@@ -61,6 +48,27 @@ Open the virtual Robotiq gripper.
    bool success
 
 .. _SerialSendData:
+
+Robotiq2FClose
+--------------
+
+Close the virtual Robotiq gripper.
+
+**Request:**
+
+.. code-block::
+
+   (None)
+
+**Response:**
+
+.. code-block::
+
+   bool success
+
+.. _Robotiq2FMove:
+
+
 
 SerialSendData
 --------------
