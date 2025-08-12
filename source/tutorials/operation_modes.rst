@@ -16,19 +16,27 @@ If you omit the ``mode`` argument, it defaults to ``virtual``.
 
    ros2 launch dsr_bringup2 dsr_bringup2_gazebo.launch.py mode:=virtual
 
-When launched in virtual mode, the **emulator (DRCF)** will automatically start and stop during the launch lifecycle.
+When launched in virtual mode, the **emulator** containing a virtual robot and controller (**DRCF**: Doosan Robot Controller Framework) will automatically start and stop during the launch lifecycle.
 
 .. note::
    - Emulator location: ``dsr_common2/bin/``
    - One emulator instance will be launched for each robot.
    - The system automatically assigns different ports for multiple robots.
 
-To check if the emulator is running correctly:
+To check if the emulator is running correctly, you can use the following command after launch:
 
 .. code-block:: bash
 
-   ps -ef | grep drcf
    docker ps   # If emulator runs in Docker container
+
+The output should look something like this:
+
+.. code-block::
+   
+   CONTAINER ID   IMAGE                            COMMAND                  CREATED          STATUS          PORTS                                                                 NAMES
+   28c08ed25f1b   doosanrobot/dsr_emulator:3.0.1   "/bin/bash /start_se…"   21 seconds ago   Up 20 seconds   1122/tcp, 3601/tcp, 0.0.0.0:12345->12345/tcp, [::]:12345->12345/tcp   dsr01_emulator
+
+
 
 **Real Mode**
 -------------
@@ -76,9 +84,9 @@ Pass the following arguments to launch in real mode:
 
 - Use this IP address as the ``host`` argument in your launch command. |br|
 
-- If the ROS 2 control node is running successfully, the control will transfer from the TP to ROS 2.
+- If ROS 2 control node is running successfully, the control will transfer from the TP to ROS 2.
 
-- A pop-up will appear on the TP confirming the transfer of control to ROS 2.
+- A pop-up will appear on the TP confirming the transfer is complete.
 
 
 .. image:: images/etc/transfer_control_pop_up.png

@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Manual'
+project = 'Doosan Robotics ROS2 Manual'
 copyright = '2025, ms'
 author = 'ms'
 version = '1.0'
@@ -38,9 +38,14 @@ rst_prolog = """
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
+# Add custom CSS
+html_css_files = [
+    'manual.css',
+]
+
 # 문서 제목 변경
 html_title = 'ROS2 Manual Guide v1.0'
-html_logo = 'tutorials/images/etc/Doosan_logo.svg.png' # logo
+html_logo = 'tutorials/images/etc/Doosan_logo.png' # logo
 # html_favicon = '_static/favicon.ico'
 
 html_sidebars = {

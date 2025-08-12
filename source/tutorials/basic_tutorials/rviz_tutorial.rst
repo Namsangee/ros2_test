@@ -94,7 +94,7 @@ Open a new terminal and run the following command:
 
     ros2 run dsr_example single_robot_simple
 
-.. image:: ../images/rviz/rviz2.png
+.. image:: ../images/rviz/rviz2.gif
      :alt: Robot Model Preview
      :width: 800px
      :align: center

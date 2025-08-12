@@ -86,15 +86,13 @@ You can spawn multiple robots in Gazebo for **multi-arm coordination** and visua
 
 .. code-block:: bash
 
-   ros2 launch dsr_bringup2 dsr_bringup2_gazebo.launch.py \
-     mode:=virtual host:=127.0.0.1 port:=12345 name:=dsr01 model:=m1013 x:=0 y:=0 color:=white
+   ros2 launch dsr_bringup2 dsr_bringup2_gazebo.launch.py mode:=virtual host:=127.0.0.1 port:=12345 name:=dsr01 model:=m1013 x:=0 y:=0 color:=white
 
 **Step 2. Spawn Second Robot**
 
 .. code-block:: bash
 
-   ros2 launch dsr_bringup2 dsr_bringup2_spawn_on_gazebo.launch.py \
-     mode:=virtual host:=127.0.0.1 port:=12347 name:=dsr02 x:=2 y:=2
+   ros2 launch dsr_bringup2 dsr_bringup2_spawn_on_gazebo.launch.py mode:=virtual host:=127.0.0.1 port:=12347 name:=dsr02 x:=2 y:=2
 
 .. image:: ../images/gazebo/multi_arm_launch_gazebo.png
    :alt: Multi-arm Launch in Gazebo

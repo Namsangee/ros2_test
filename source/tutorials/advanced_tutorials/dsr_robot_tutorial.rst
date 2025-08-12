@@ -1,17 +1,13 @@
 .. _dsr_robot_tutorial:
 
-DSR_ROBOT2 Library Tutorial
-===========================
-
-.. contents::
-   :local:
-   :depth: 1
+DSR_ROBOT2 Python Library Tutorial
+==================================
 
 
 Overview
 --------
 
-This tutorial provides an overview of the ``DSR_ROBOT2`` library and instructions on how to use it for robot control.
+This tutorial provides an overview of the ``DSR_ROBOT2`` Python library and instructions on how to use it for robot control.
 
 The ``DSR_ROBOT2`` library offers a high-level Python interface for controlling Doosan robots within the ROS 2 ecosystem.  
 It is designed to simplify robot manipulation by providing a user-friendly API for motion control, configuration, and communication.
@@ -19,17 +15,17 @@ It is designed to simplify robot manipulation by providing a user-friendly API f
 Architecture
 ------------
 
-The ``DSR_ROBOT2`` package acts as a ROS 2 wrapper, enabling robot control through Python scripting.  
+The ``DSR_ROBOT2`` package acts as a ROS 2 wrapper, enabling robot control through Python scripts.  
 The architecture is composed of the following layers:
 
-.. image:: ../images/etc/ros2_interface.png
+.. image:: ../images/etc/dsr_robot_interface.png
    :alt: ROS2 Interface
    :width: 100%
    :align: center
 
 - **DSR_ROBOT2** (Python Interface): Publishes commands via ROS 2 topics/services and interacts with `dsr_controller2`.
-- **dsr_controller2**: Translates ROS 2 service and topic commands into calls to the native robot control library (DRFL).
-- **DRFL** (Doosan Robotics Framework Library): C++ API for communicating with the robot controller software (DRCF).
+- **dsr_controller2**: Translates ROS 2 service and topic commands into calls to the Doosan robot control library (DRFL).
+- **DRFL** (Doosan Robotics Framework Library): C++ API for communicating with the robot controller software.
 - **DRCF** (Doosan Robot Controller Framework): The low-level controller running on the robot or emulator.
 
 Setup and Launch
@@ -42,7 +38,8 @@ This section explains how to configure and execute basic motion control using th
 
 **1. Initializing the Robot Configuration**
 
-Before any operation, you must specify the robot's ID and model name. The ``DR_init`` module is used to store this configuration, which will be used by the library to connect to the correct robot controller.
+Before any operation, you must specify the robot's ID and model name. 
+The ``DR_init`` module is used to store this configuration.
 
 .. code-block:: python
 
@@ -54,7 +51,8 @@ Before any operation, you must specify the robot's ID and model name. The ``DR_i
 
 **2. Setting up the ROS 2 Node**
 
-Communication in ROS 2 is handled through nodes. You must initialize the `rclpy` library and create a node. This node is then assigned to the `DR_init` module, enabling the library to communicate over the ROS 2 network.
+Communication in ROS 2 is handled through nodes. You must initialize the `rclpy` library and create a node. 
+This node is then assigned to the `DR_init` module, enabling the library to communicate over the ROS 2 network.
 
 .. code-block:: python
 
@@ -78,8 +76,8 @@ The core functionalities for robot control, such as movement commands and positi
 
 Before sending motion commands or settings, the robot must be set to the correct mode.
 
-- ``ROBOT_MODE_AUTONOMOUS`` allows the robot to be actually controlled and moved. 
-- ``ROBOT_MODE_MANUAL`` allows for robot settings, such as adding tools at the end-effector.
+- ``ROBOT_MODE_AUTONOMOUS`` : robot is able to be controlled and move. 
+- ``ROBOT_MODE_MANUAL`` : for robot settings, such as adding tools at the end-effector.
 
 You can also set default global velocities and accelerations if you want.
 
@@ -121,8 +119,12 @@ Setup and build the node. Now you can move the robot as you want.
 
 .. code-block:: bash
 
-  ros2 launch dsr_bringup2 dsr_bringup2_rviz.launch.py 
-  # Run in a new terminal the node you created
+  ros2 launch dsr_bringup2 dsr_bringup2_rviz.launch.py
+
+Run in a new terminal the node you created:
+
+.. code-block:: bash
+
   ros2 run <pkg_name> <new_node_name>
   # ex> ros2 run dsr_example single_robot_simple
 
@@ -131,9 +133,9 @@ Setup and build the node. Now you can move the robot as you want.
 The library provides various other motion commands (e.g., ``movel`` for linear motion, ``movec`` for circular motion) 
 to accommodate different application needs. |br|
 
-Or the current function list below:
+Check the 
 :ref:`Full Python API Reference <python_api>`
-
+or the links below for more details.
 
 References
 ----------
