@@ -269,6 +269,11 @@ Moves along an arc to target ``pos2`` via waypoint ``pos1``, or rotates by a spe
    :width: 80%
    :align: center
 
+.. raw:: html
+
+   <br>
+   <br>
+
 .. note::
 
    - If ``vel`` is provided (e.g., ``vel=[30, 0]``), it specifies the **linear** velocity; the **angular** velocity is set **proportionally** to this linear velocity.
@@ -484,6 +489,11 @@ Amplitudes and periods set the per-axis motion; accel/decel time and repetition 
    :alt: ROS2 Interface
    :width: 80%
    :align: center
+
+.. raw:: html
+
+   <br>
+   <br>
 
 .. note::
 

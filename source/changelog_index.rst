@@ -10,7 +10,6 @@ Changelog
 
 .. toctree::
    :maxdepth: 2
-   :caption: Updates pages
 
    changelog/migration_note
    changelog/timeline_note

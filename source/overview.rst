@@ -3,16 +3,6 @@
 Overview
 ========
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Contents
-
-   overview/architecture
-   overview/package
-
-Details
--------
-
 Purpose
 ~~~~~~~
 This package provides control functionality for all Doosan robot models in the **ROS 2 Jazzy** environment.
@@ -34,3 +24,13 @@ License
 ~~~~~~~
 All packages are distributed under **Apache License 2.0**.  
 See the LICENSE file for details.
+
+Details
+~~~~~~~
+
+
+.. toctree::
+   :maxdepth: 1
+
+   overview/architecture
+   overview/package

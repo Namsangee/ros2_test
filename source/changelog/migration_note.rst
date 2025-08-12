@@ -1,6 +1,6 @@
 .. _migration_note:
 
-Migration fr9m Humble to Jazzy
+Migration from Humble to Jazzy
 ===============================
 
 This document summarizes the changes applied during the migration from **ROS 2 Humble** to **ROS 2 Jazzy**.  
