@@ -3,12 +3,11 @@
 Overview
 ========
 
-Purpose
-~~~~~~~
+.. rubric:: Purpose
+
 This package provides control functionality for all Doosan robot models in the **ROS 2 Jazzy** environment.
 
-Features
-~~~~~~~~
+.. rubric:: Features
 
 - Supports all Doosan robot models (A/M/H/E/P series)
 - Virtual emulator mode for development and testing without hardware
@@ -20,13 +19,13 @@ Features
 - RViz2-based robot state visualization and planning preview
 - Includes sample applications and demo scripts for quick setup and usage
 
-License
-~~~~~~~
+.. rubric:: License
+
 All packages are distributed under **Apache License 2.0**.  
 See the LICENSE file for details.
 
 Details
-~~~~~~~
+---------
 
 
 .. toctree::

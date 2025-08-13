@@ -13,8 +13,8 @@ Motion Services
 Trans
 -----
 
-- Translates/rotates the input pose (``pos``) by ``delta`` in the **``ref``** coordinate, then returns the result expressed in **``ref_out``**.
-- If **``ref`` is DR_TOOL**, the result is returned in the input pose’s frame and **``ref_out`` is ignored**.
+- Translates/rotates the input pose (``pos``) by ``delta`` in the ``ref`` coordinate, then returns the result expressed in ``ref_out``.
+- If ``ref`` is **DR_TOOL**, the result is returned in the input pose’s frame and ``ref_out`` is **ignored**.
 
 **Request:**
 
@@ -221,6 +221,11 @@ Moves along a straight line in task space to the target pose (``pos``).
    :alt: ROS2 Interface
    :width: 80%
    :align: center
+
+.. raw:: html
+
+   <br>
+   <br>
 
 .. note::
 

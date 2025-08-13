@@ -23,3 +23,12 @@
 .wy-side-nav-search input[type=text] {
     border-color: #ccc;
 }
+
+/* custom style for rubric headings to make them larger */
+.rst-content .rubric {
+    font-size: 1.5em; /* Adjust size as needed */
+    font-weight: 800;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    padding-bottom: 0.3em;
+}

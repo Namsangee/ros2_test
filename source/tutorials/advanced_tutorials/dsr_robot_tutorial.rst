@@ -18,10 +18,21 @@ Architecture
 The ``DSR_ROBOT2`` package acts as a ROS 2 wrapper, enabling robot control through Python scripts.  
 The architecture is composed of the following layers:
 
-.. image:: ../images/etc/dsr_robot_interface.png
+.. image:: ../images/etc/ros2_dsr_robot_flowchart_.png
    :alt: ROS2 Interface
    :width: 100%
    :align: center
+
+.. raw:: html
+
+   <br>
+   <br>
+   
+.. image:: ../images/etc/ros2_dsr_robot_flowchart.png
+   :alt: ROS2 Interface
+   :width: 100%
+   :align: center
+
 
 - **DSR_ROBOT2** (Python Interface): Publishes commands via ROS 2 topics/services and interacts with `dsr_controller2`.
 - **dsr_controller2**: Translates ROS 2 service and topic commands into calls to the Doosan robot control library (DRFL).
