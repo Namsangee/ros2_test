@@ -270,7 +270,7 @@ This service returns the sensor torque value of the current joint.
 
 **Request:**
 
-.. code-block:: bash
+.. code-block::
 
    (None)
 

@@ -3,6 +3,13 @@
 Overview
 ========
 
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   overview/architecture
+   overview/package
+
 .. rubric:: Purpose
 
 This package provides control functionality for all Doosan robot models in the **ROS 2 Jazzy** environment.
@@ -24,12 +31,9 @@ This package provides control functionality for all Doosan robot models in the *
 All packages are distributed under **Apache License 2.0**.  
 See the LICENSE file for details.
 
-Details
----------
+.. rubric::
+   :ref:`Architecture <architecture>`
 
+.. rubric:: 
+   :ref:`Packages <package>`
 
-.. toctree::
-   :maxdepth: 1
-
-   overview/architecture
-   overview/package
