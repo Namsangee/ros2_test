@@ -9,7 +9,7 @@ This architecture illustrates the data flow between user commands, controller la
 
    <br><br>
 
-.. image:: images/overview_architecture.png
+.. image:: images/architecture_update.png
    :alt: Doosan ROS 2 Architecture
    :width: 100%
    :align: center
