@@ -1,79 +1,79 @@
 .. _migration_note:
 
-Migration from Humble to Jazzy
-===============================
+Migration from ROS 2 Humble to ROS 2 Jazzy
+==========================================
 
-This document summarizes the changes applied during the migration from **ROS 2 Humble** to **ROS 2 Jazzy**.  
-For detailed code-level differences, please refer to each component section below.
+This document summarizes the key changes when migrating from **ROS 2 Humble** to **ROS 2 Jazzy**.
+For detailed, code-level guidance, refer to the relevant official migration guides in the ROS 2 documentation.
 
 Bringup
 -------
 
 **MoveItConfigsBuilder Updates**
 
-- Use `.planning_pipelines()` to explicitly define `planning_plugins`, `default_planning_pipeline`, and `load_all`.
-- `default_planning_pipeline` is now **mandatory**; if omitted, runtime errors may occur.
-- After `.to_moveit_configs()`, apply `.to_dict()` to consistently pass parameters to both `MoveGroup` and `RViz` nodes.
+- Use ``.planning_pipelines()`` to explicitly specify ``planning_plugins``, ``default_planning_pipeline``, and ``load_all``.
+- ``default_planning_pipeline`` is now **mandatory** — omitting it may result in runtime errors.
+- After ``.to_moveit_configs()``, call ``.to_dict()`` to properly pass configuration to both ``MoveGroup`` and ``RViz`` nodes.
 
 **Dynamic YAML Configuration**
 
-- New `dynamic_yaml` launch argument enables runtime generation of controller YAML from the robot model.
-- The system parses `robot_description` to extract active/passive joints and creates controller YAML dynamically.
-- If a specific controller YAML (e.g., `dsr_controller2_<model>.yaml`) is missing, it falls back to `dsr_controller2.yaml`.
+- Introduce a new launch argument ``dynamic_yaml`` to generate controller configuration YAML dynamically at runtime.
+- The system parses the ``robot_description`` to extract active/passive joint data and constructs controller YAML automatically.
+- If a specific controller YAML (e.g. ``dsr_controller2_<model>.yaml``) is not found, it falls back to ``dsr_controller2.yaml``.
 
 **Launch Flow Refactoring**
 
-- Replaced parallel launch with sequential execution using `OnProcessExit`.
-- Full node execution sequence:
+- Sequential node startup using ``OnProcessExit`` replaces previous parallel launch patterns.
+- Recommended launch sequence::
 
-  ``set_config_node → ros2_control_node → joint_state_broadcaster → dsr_controller2 → dsr_moveit_controller → move_group + RViz2``
+    set_config_node → ros2_control_node → joint_state_broadcaster → dsr_controller2 → dsr_moveit_controller → move_group + RViz2
 
-- `set_config_node` sets hardware params and triggers `ros2_control_node`.
-- `joint_state_broadcaster` is started early to provide `/joint_states` to subscribers.
+- ``set_config_node`` sets hardware parameters then triggers ``ros2_control_node``.
+- ``joint_state_broadcaster`` now runs early to ensure ``/joint_states`` is available from the start.
 
-Hardware Interface (dsr_hw_interface2)
---------------------------------------
+Hardware Interface (``dsr_hw_interface2``)
+------------------------------------------
 
-**Hardware-Centric Architecture**
+**New Hardware-Centric Architecture**
 
-- Migrated from `ControllerInterface` (Humble) to `SystemInterface` (Jazzy).
-- Initialization steps (DRFL init, callbacks, param parsing) are now handled in hardware layer.
-- Lifecycle hooks `on_init()`, `on_configure()`, `on_activate()` are fully respected.
+- Migration from ``ControllerInterface`` to ``SystemInterface`` under Jazzy.
+- Initialization steps (DRFL init, callback registration, parameter parsing) now reside in the hardware layer.
+- Full support for lifecycle hooks: ``on_init()``, ``on_configure()``, ``on_activate()``.
 
-**Callback Refactoring**
+**Callback Refactor**
 
-- Moved all callbacks (`OnMonitoringState`, `OnMonitoringDataEx`, `OnDisconnected`, `OnLogAlarm`) into the hardware layer.
-- Now registered collectively inside `DRHWInterface::on_init()` or `on_activate()` for consistency.
+- All monitoring callbacks (``OnMonitoringState``, ``OnMonitoringDataEx``, ``OnDisconnected``, ``OnLogAlarm``) are now managed in the hardware layer.
+- These callbacks are registered in ``DRHWInterface::on_init()`` or ``on_activate()`` for consistency.
 
-**Flexible DOF & Parameter Parsing**
+**Flexible DOF Handling & Parameters**
 
-- Robot metadata (model, dof, gripper) are parsed from `HardwareInfo`.
-- Arrays such as `joint_position_`, `joint_velocity_`, `command_` are resized dynamically based on joint count.
+- Robot metadata (model name, degrees of freedom, gripper type) are parsed from ``HardwareInfo``.
+- Arrays such as ``joint_position_``, ``joint_velocity_``, and ``command_`` are resized dynamically based on joint count.
 
-**Hardware Index Mapping**
+**Hardware Mapping**
 
-- Introduced `hw_mapping_` to map URDF/SRDF joint names to DRFL internal indices.
-- Improves clarity and enables multi-model reuse.
+- ``hw_mapping_`` enables mapping between URDF/SRDF joint names and internal DRFL indices.
+- Facilitates clarity and support for multiple robot configurations.
 
-**RT Control Enhancements**
+**Real-Time Control Enhancements**
 
-- Conditional use of `rt_host` vs `host` based on DRCF version (e.g., ≥ 3.0 uses `rt_host`).
-- Functions like `set_rt_control_output()` and `start_rt_control()` run only in robot mode and non-emulator cases.
+- Use ``rt_host`` instead of ``host`` in DRCF versions ≥ 3.0.
+- Functions like ``set_rt_control_output()`` and ``start_rt_control()`` execute only in **robot mode** (not emulator).
 
-**Monitoring Extensions**
+**Monitoring Upgrades**
 
-- Replaced `OnMonitoringDataCB` with `OnMonitoringDataExCB` and `OnMonitoringCtrlIOExCB`.
-- Enables access to force/torque/position data in tool/world/user frames for advanced compliance control.
+- Replaced ``OnMonitoringDataCB`` with ``OnMonitoringDataExCB`` and ``OnMonitoringCtrlIOExCB``.
+- Offers access to force/torque/position data in tool, world, and user frames — ideal for advanced compliance controls.
 
 **Additional Improvements**
 
-- Added real-time error monitoring via `/error` topic using `LogAlarm` callback.
-- Emulator mode is auto-detected by checking for loopback IP (`127.0.0.1`).
+- Real-time error monitoring added via ``/error`` topic using ``LogAlarm`` callback.
+- Emulator detection: automatic via loopback IP (``127.0.0.1``).
 
 Xacro Fixes
 -----------
 
-- Add `pi`-related expressions as `xacro:property` at the top:
+- Define ``pi`` expressions with ``xacro:property`` at the top:
 
   .. code-block:: xml
 
@@ -81,13 +81,13 @@ Xacro Fixes
      <xacro:property name="neg_double_pi" value="${-2.0 * pi}"/>
      <xacro:property name="neg_pi" value="${-1.0 * pi}"/>
 
-- Jazzy's `ros2_control` cannot parse raw expressions like `{2*pi}`.
-- Always wrap expressions with `${...}` using `xacro:property`.
+- Jazzy’s ``ros2_control`` cannot parse raw ``{2*pi}`` expressions.
+- Always use ``${...}`` syntax and define via ``xacro:property``.
 
 SRDF Fixes
 ----------
 
-- Ensure `<robot name="...">` matches URDF:
+- Ensure ``<robot name="...">`` matches the URDF ``name``:
 
   .. code-block:: xml
 
@@ -97,14 +97,16 @@ SRDF Fixes
      <!-- After -->
      <robot name="m1013">
 
-- Jazzy strictly requires that URDF and SRDF use the same robot name.
-- Mismatches will trigger: `Semantic description is not specified for the same robot as the URDF`.
+- Jazzy requires exact match between URDF and SRDF robot names.
+- A mismatch will trigger an error::
 
-_planning.yaml Fixes
----------------------
+     Semantic description is not specified for the same robot as the URDF
 
-- Replace `planning_plugin` (string) with `planning_plugins` (string_array).
-- Split all adapters into `request_adapters` and `response_adapters`.
+_planning.yaml Fixes (MoveIt2)
+------------------------------
+
+- Replace ``planning_plugin`` (string) with ``planning_plugins`` (array of strings).
+- Separate adapters into ``request_adapters`` and ``response_adapters``:
 
   .. code-block:: yaml
 
@@ -122,21 +124,38 @@ _planning.yaml Fixes
        - default_planning_response_adapters/ValidateSolution
        - default_planning_response_adapters/DisplayMotionPath
 
-- YAML values must now be written in hyphen-prefixed list format for `string_array`.
+- Lists must use a hyphen-prefixed format (``- item``) as ``string_array``.
 
 QoS Changes
 -----------
 
 - Deprecated: ``rmw_qos_profile_*``
-- New: Use `rclcpp::QoS` for all publishers/subscribers.
+- Use ``rclcpp::QoS`` for all publishers and subscribers in C++:
 
   .. code-block:: cpp
 
      auto qos = rclcpp::QoS(10).best_effort();
      node->create_subscription<MsgType>("topic", qos, callback);
 
-- Default policy updates (some topics):
+- Default QoS policy updates:
+  - ``reliable`` → ``best_effort``
+  - ``transient_local`` → ``volatile``
 
-  - `reliable` → `best_effort`
-  - `transient_local` → `volatile`
+Summary of Official ``ros2_control`` Migration Highlights
+----------------------------------------------------------
 
+According to the official ROS 2 Jazzy migration guides and release notes:
+
+**diff_drive_controller**
+- ``cmd_vel`` must now use a *stamped* twist message.
+- Deprecated parameters: ``has_velocity_limits``, ``has_acceleration_limits``, ``has_jerk_limits`` — set limits to ``.NAN`` instead.
+
+**gripper_action_controller**
+- Legacy controllers (``effort_...``, ``position_...``) removed. Use ``parallel_gripper_action_controller/GripperActionController``.
+
+**joint_trajectory_controller**
+- Default ``allow_nonzero_velocity_at_trajectory_end`` is now ``false``.
+- ``start_with_holding`` removed; always holds on activation.
+- Cancels goals on ``on_deactivate``.
+- Discards empty trajectories.
+- Angle wraparound auto-detected from URDF continuous joints; remove ``angle_wraparound`` parameter.
