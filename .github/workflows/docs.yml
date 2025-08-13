@@ -27,7 +27,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Build Sphinx
-        run: sphinx-build -b html source build
+        run: |
+          sphinx-build -b html source build
+          touch build/.nojekyll   # ← Jekyll 비활성화(중요)
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
