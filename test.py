@@ -34,13 +34,12 @@ def _set(k, v):
     except Exception:
         pass
 
-# 멀티 GPU/RTX 후처리/선택 하이라이트 비활성화 (필요 시 나중에 단계적으로 켜기)
 _set("/renderer/multiGpu/enabled", False)
 _set("/rtx/aa/enabled", True)
 _set("/rtx/denoiser/enabled", True)
-_set("/rtx/reflections/enabled", False)
-_set("/rtx/indirectDiffuse/enabled", False)
-_set("/renderer/textureStreaming/enabled", True)  # VRAM 피크 완화
+_set("/rtx/reflections/enabled", True)
+_set("/rtx/indirectDiffuse/enabled", True)
+_set("/renderer/textureStreaming/enabled", True)
 
 # 여러 버전 키 후보 (존재하면 False로)
 for key in [
@@ -54,18 +53,32 @@ for key in [
 # -----------------------------------------------------------------------------
 # Paths / Constants
 # -----------------------------------------------------------------------------
+
+# m1013
 ROBOT_MOUNT_PRIM      = "/Root"
-ROBOT_USD_PATH        = "/ros2_ws/src/curobo/cumotion_pkg/config/usd/m1013_gripper.usd"  # docker
+ROBOT_USD_PATH        = "/ros2_ws/src/curobo/cumotion_pkg/config/usd/m1013_gripper.usd"
+
+# room
 BACKGROUND_STAGE_PRIM = "/background"
-BACKGROUND_USD_PATH   = "/Isaac/Environments/Simple_Room/simple_room.usd"
+BACKGROUND_USD_PATH   = "/ros2_ws/src/curobo/cumotion_pkg/config/usd/room.usd"
+
+# machine
+MACHINE_MOUNT_PATH = "/Environment/Machine" 
+MACHINE_USD_PATH  = "/ros2_ws/src/curobo/cumotion_pkg/config/etc/machine/machine.usd"
+
+# plate
+PLATE_MOUNT_PATH = "/Environment/Plate" 
+PLATE_USD_PATH  = "/ros2_ws/src/curobo/cumotion_pkg/config/etc/plate/plate3.usdc"
+
 GRAPH_PATH            = "/ActionGraph"
 ROS_VIEWPORT_NAME     = "ros_camera_viewport"
 
 # -----------------------------------------------------------------------------
 # Helper Functions
 # -----------------------------------------------------------------------------
+# Wait until USD Stage is ready, return stage
 def wait_stage(timeout: float = 10.0):
-    """Wait until USD Stage is ready, return stage."""
+    # Wait until a valid USD stage is available or until timeout expires
     ctx = omni.usd.get_context()
     t0 = time.time()
     while time.time() - t0 < timeout:
@@ -76,31 +89,33 @@ def wait_stage(timeout: float = 10.0):
         time.sleep(0.05)
     return ctx.get_stage()
 
+
 def prim_exists(path: str) -> bool:
+    # Check if a prim exists and is valid at the given USD stage path
     stg = omni.usd.get_context().get_stage()
     if not stg:
         return False
     p = stg.GetPrimAtPath(path)
     return bool(p and p.IsValid())
 
-def find_robot_root_candidates():
-    return ["/Root/m1013/m1013", "/Root/m1013", "/m1013/m1013", "/m1013"]
 
 def pick_robot_root():
+    # Return the first valid robot root prim path, fallback to default if none found
     wait_stage()
-    for p in find_robot_root_candidates():
+    candidates = ["/Root/m1013/m1013", "/Root/m1013", "/m1013/m1013", "/m1013"]
+    for p in candidates:
         if prim_exists(p):
             return p
     return "/Root/m1013"
 
+
 def find_camera_path():
+    # Search for a valid camera prim path under the robot root
     stg = wait_stage()
+    robot_root = pick_robot_root()
     candidates = [
         "/Root/m1013/d435i_camera/realsense_camera",
         "/Root/m1013/m1013/d435i_camera/realsense_camera",
-    ]
-    robot_root = pick_robot_root()
-    candidates += [
         f"{robot_root}/d435i_camera/realsense_camera",
         f"{robot_root}/realsense_camera",
     ]
@@ -115,7 +130,9 @@ def find_camera_path():
                 return str(p.GetPath())
     return None
 
+
 def find_grasp_frame_path():
+    # Locate the grasp_frame prim path under the robot root
     stg = wait_stage()
     robot_root = pick_robot_root()
     candidates = [
@@ -135,6 +152,66 @@ def find_grasp_frame_path():
                 return str(p.GetPath())
     return None
 
+# Add a background USD to the stage, handling Isaac content paths and local files
+def add_background(background_path: str, prim_path: str):
+    assets_root_path = nucleus.get_assets_root_path()
+
+    if background_path.startswith("/Isaac"):
+        if not assets_root_path:
+            carb.log_warn("[Background] Isaac content path given but assets_root_path is None; skipping.")
+            return
+        full = assets_root_path + background_path
+        stage.add_reference_to_stage(full, prim_path)
+        return
+
+    if os.path.isabs(background_path):
+        if not os.path.exists(background_path):
+            raise FileNotFoundError(f"[Background] Local USD not found: {background_path}")
+        stage.add_reference_to_stage(f"file://{background_path}", prim_path)
+        return
+
+    stage.add_reference_to_stage(background_path, prim_path)
+
+def _norm_usd_path(p: str) -> str:
+    assets_root = nucleus.get_assets_root_path()
+    if p.startswith("/Isaac"):
+        if not assets_root:
+            raise RuntimeError("No Nucleus assets root for /Isaac path")
+        return assets_root + p
+    if os.path.isabs(p):
+        if not os.path.exists(p):
+            raise FileNotFoundError(p)
+        return "file://" + p
+    return p
+
+def fix_plate(usd_path: str, mount_path: str):
+    stg = wait_stage()
+    # ensure mount prim
+    if not prim_exists(mount_path):
+        prims.create_prim(mount_path, "Xform")
+
+    # re-add reference cleanly
+    prim = stg.GetPrimAtPath(mount_path)
+    try:
+        prim.GetReferences().ClearReferences()
+    except Exception:
+        pass
+    stage.add_reference_to_stage(_norm_usd_path(usd_path), mount_path)
+
+    # let the reference load a moment
+    for _ in range(3):
+        simulation_app.update()
+
+    # patch all meshes under the plate: disable subdivision, enable double-sided
+    root = stg.GetPrimAtPath(mount_path)
+    for p in Usd.PrimRange(root):
+        m = UsdGeom.Mesh(p)
+        if not m:
+            continue
+        try: m.GetSubdivisionSchemeAttr().Set("none")
+        except Exception: pass
+        try: m.CreateDoubleSidedAttr(True)
+        except Exception: pass
 # -----------------------------------------------------------------------------
 # ROS2 Bridge / Simulation Context
 # -----------------------------------------------------------------------------
@@ -147,65 +224,73 @@ simulation_context = SimulationContext(stage_units_in_meters=1.0)
 # -----------------------------------------------------------------------------
 assets_root_path = nucleus.get_assets_root_path()
 if assets_root_path is None:
-    carb.log_error("Could not find Isaac Sim assets folder")
-    simulation_app.close()
-    sys.exit(1)
+    carb.log_warn("No Nucleus assets root found; proceeding with local assets only.")
 
-viewports.set_camera_view(eye=np.array([1.2, 1.2, 0.8]), target=np.array([0, 0, 0.5]))
-stage.add_reference_to_stage(assets_root_path + BACKGROUND_USD_PATH, BACKGROUND_STAGE_PRIM)
+viewports.set_camera_view(eye=np.array([1.2, 1.2, 0.8]), target=np.array([0, 0, 0.5]))  # Setting viewports
+add_background(BACKGROUND_USD_PATH, BACKGROUND_STAGE_PRIM) # Setting background usd
 
+# Setting robot usd
 if not os.path.exists(ROBOT_USD_PATH):
     raise FileNotFoundError(f"Robot USD not found: {ROBOT_USD_PATH}")
-
 if not prim_exists("/Root/m1013"):
     prims.create_prim(
         "/Root/m1013",
         "Xform",
-        position=np.array([0.0, -0.64, 0.0]),
+        position=np.array([0.0, -0.64, -0.23]),
         orientation=rotations.gf_rotation_to_np_array(Gf.Rotation(Gf.Vec3d(0, 0, 1), 90)),
     )
-
 stage.add_reference_to_stage(ROBOT_USD_PATH, "/Root/m1013")
+
+# Setting machine usd
+if not os.path.exists(MACHINE_USD_PATH):
+    raise FileNotFoundError(f"Machine USD not found: {MACHINE_USD_PATH}")
+if not prim_exists(MACHINE_MOUNT_PATH):
+    prims.create_prim(
+        MACHINE_MOUNT_PATH,
+        "Xform",
+        position=np.array([-1.5, 0.0, 0.0], dtype=float),
+        orientation=rotations.gf_rotation_to_np_array(
+            Gf.Rotation(Gf.Vec3d(0,0,1), 0.0) *   
+            Gf.Rotation(Gf.Vec3d(0,1,0),   -90.0)  *   
+            Gf.Rotation(Gf.Vec3d(1,0,0),   90.0)  
+        ),
+        scale=np.array([1.0, 1.0, 1.0], dtype=float),
+    )
+stage.add_reference_to_stage(MACHINE_USD_PATH, MACHINE_MOUNT_PATH)
+
+# Setting robot usd
+if not os.path.exists(ROBOT_USD_PATH):
+    raise FileNotFoundError(f"Robot USD not found: {ROBOT_USD_PATH}")
+if not prim_exists("/Root/m1013"):
+    prims.create_prim(
+        "/Root/m1013",
+        "Xform",
+        position=np.array([0.0, -0.64, -0.23]),
+        orientation=rotations.gf_rotation_to_np_array(Gf.Rotation(Gf.Vec3d(0, 0, 1), 90)),
+    )
+stage.add_reference_to_stage(ROBOT_USD_PATH, "/Root/m1013")
+
+# Setting plate usd
+fix_plate(PLATE_USD_PATH, PLATE_MOUNT_PATH)
+# if not os.path.exists(PLATE_USD_PATH):
+#     raise FileNotFoundError(f"Machine USD not found: {PLATE_USD_PATH}")
+# if not prim_exists(PLATE_MOUNT_PATH):
+#     prims.create_prim(
+#         PLATE_MOUNT_PATH,
+#         "Xform",
+#         position=np.array([0.0, 0.0, 0.0], dtype=float),
+#         orientation=rotations.gf_rotation_to_np_array(
+#             Gf.Rotation(Gf.Vec3d(0,0,1), 0.0) *   
+#             Gf.Rotation(Gf.Vec3d(0,1,0),   0.0)  *   
+#             Gf.Rotation(Gf.Vec3d(1,0,0),   0.0)  
+#         ),
+#         scale=np.array([1.0, 1.0, 1.0], dtype=float),
+#     )
+# stage.add_reference_to_stage(PLATE_USD_PATH, PLATE_MOUNT_PATH)
 
 for _ in range(10):
     simulation_app.update()
     time.sleep(0.02)
-
-# # Sample cubes
-# prims.create_prim(
-#     "/Cube",
-#     "Cube",
-#     position=np.array([-0.04694, 0.33183, 0.10395]),
-#     scale=np.array([0.04, 0.4, 0.15])
-# )
-
-# blue_box_prim = prims.create_prim("/blue_box", "Xform", position=np.array([-0.2, 0.025, 0.05]))
-# cube_prim = prims.create_prim("/blue_box/cube", "Cube")
-# cube_geom = UsdGeom.Cube(cube_prim); cube_geom.GetSizeAttr().Set(0.04)
-# material_prim = prims.create_prim("/blue_box/material", "Material")
-# material = UsdShade.Material(material_prim)
-# shader = UsdShade.Shader.Define(stage.get_current_stage(), "/blue_box/material/shader")
-# shader.CreateIdAttr("UsdPreviewSurface")
-# shader.CreateInput("diffuseColor", Sdf.ValueTypeNames.Color3f).Set((0.0, 0.0, 230/255.0))
-# material.CreateSurfaceOutput().ConnectToSource(shader.ConnectableAPI(), "surface")
-# UsdShade.MaterialBindingAPI(cube_prim).Bind(material)
-# UsdPhysics.RigidBodyAPI.Apply(cube_prim)
-# UsdPhysics.CollisionAPI.Apply(cube_prim)
-# mass_api = UsdPhysics.MassAPI.Apply(cube_prim); mass_api.GetMassAttr().Set(0.05)
-
-# red_box_prim = prims.create_prim("/red_cube", "Xform", position=np.array([0.1646, -0.02, 0.055]))
-# red_cube_geom_prim = prims.create_prim("/red_cube/cube", "Cube")
-# red_cube_geom = UsdGeom.Cube(red_cube_geom_prim); red_cube_geom.GetSizeAttr().Set(0.04)
-# red_material_prim = prims.create_prim("/red_cube/material", "Material")
-# red_material = UsdShade.Material(red_material_prim)
-# red_shader = UsdShade.Shader.Define(stage.get_current_stage(), "/red_cube/material/shader")
-# red_shader.CreateIdAttr("UsdPreviewSurface")
-# red_shader.CreateInput("diffuseColor", Sdf.ValueTypeNames.Color3f).Set((1.0, 0.0, 0.0))
-# red_material.CreateSurfaceOutput().ConnectToSource(red_shader.ConnectableAPI(), "surface")
-# UsdShade.MaterialBindingAPI(red_cube_geom_prim).Bind(red_material)
-# UsdPhysics.RigidBodyAPI.Apply(red_cube_geom_prim)
-# UsdPhysics.CollisionAPI.Apply(red_cube_geom_prim)
-# mass_api = UsdPhysics.MassAPI.Apply(red_cube_geom_prim); mass_api.GetMassAttr().Set(0.05)
 
 simulation_app.update()
 
@@ -287,7 +372,7 @@ try:
                 ("PublishJointState.inputs:topicName", "/dsr01/joint_states"),
                 ("SubscribeJointState.inputs:topicName", "/joint_states"),
                 ("PublishTransformTree.inputs:targetPrims", target_list),
-                # ("PublishClock.inputs:topicName", "/clock"),  # 기본값 사용 시 주석 유지
+                # ("PublishClock.inputs:topicName", "/clock"),
             ],
         },
     )
@@ -301,7 +386,6 @@ except Exception as e:
 
 # -----------------------------------------------------------------------------
 # Graph 2: Camera -> ROS (RGB/Depth/CameraInfo)
-#   중요: 뷰포트/렌더프로덕트는 '한 번만' 생성 (OnStart), 퍼블리시는 매 프레임(OnTick)
 # -----------------------------------------------------------------------------
 try:
     camera_frame = camera_path.split("/")[-1]
@@ -388,7 +472,6 @@ simulation_context.initialize_physics()
 simulation_context.play()
 
 while simulation_app.is_running():
-    # render=True여도 이제 뷰포트/렌더프로덕트는 재생성되지 않음
     simulation_context.step(render=True)
 
 simulation_context.stop()
