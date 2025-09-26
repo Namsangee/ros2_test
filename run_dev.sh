@@ -290,40 +290,56 @@ docker run -it --rm \
     -v $ISAAC_ROS_DEV_DIR:/workspaces/isaac_ros-dev \
     -v ${HOME}/ros2_ws:/ros2_ws \
     -v /etc/localtime:/etc/localtime:ro \
-    -v /var/run/docker.sock:/var/run/docker.sock \
     --name "$CONTAINER_NAME" \
     --runtime nvidia \
     --entrypoint /usr/local/bin/scripts/workspace-entrypoint.sh \
     --workdir /workspaces/isaac_ros-dev \
     $BASE_NAME \
     /bin/bash -c "
-            sudo apt-get update && \
-            sudo apt-get install -y libpoco-dev libyaml-cpp-dev wget \
-                            ros-humble-control-msgs ros-humble-realtime-tools ros-humble-xacro \
-                            ros-humble-joint-state-publisher-gui ros-humble-ros2-control \
-                            ros-humble-ros2-controllers ros-humble-gazebo-msgs ros-humble-moveit-msgs \
-                            dbus-x11 ros-humble-moveit-configs-utils ros-humble-moveit-ros-move-group \
-                            ros-humble-gazebo-ros-pkgs ros-humble-ros-gz-sim ros-humble-ign-ros2-control && \
-            source /opt/ros/humble/setup.bash && \
-            rosdep update && rosdep install --from-paths \${ISAAC_ROS_WS}/src/isaac_ros_cumotion --ignore-src -y && \
+        # 패키지 설치
+        sudo apt-get update && \
+        sudo apt-get install -y \
+            libpoco-dev libyaml-cpp-dev wget \
+            ros-humble-control-msgs ros-humble-realtime-tools ros-humble-xacro \
+            ros-humble-joint-state-publisher-gui ros-humble-ros2-control \
+            ros-humble-ros2-controllers ros-humble-gazebo-msgs ros-humble-moveit-msgs \
+            dbus-x11 ros-humble-moveit-configs-utils ros-humble-moveit-ros-move-group \
+            ros-humble-gazebo-ros-pkgs ros-humble-ros-gz-sim ros-humble-ign-ros2-control && \
 
-            rosdep update && \
-            rosdep install -i -r --from-paths \${ISAAC_ROS_WS}/src/isaac_ros_nvblox --rosdistro \$ROS_DISTRO -y && \
-            colcon build --symlink-install --base-paths \${ISAAC_ROS_WS}/src/isaac_ros_nvblox && \
+        # ROS 환경 설정
+        source /opt/ros/humble/setup.bash && \
 
-            cd \${ISAAC_ROS_WS}/src && rosdep install -r --from-paths . --ignore-src --rosdistro $ROS_DISTRO -y && \
-            cd \${ISAAC_ROS_WS} && \
-            colcon build --packages-up-to isaac_ros_cumotion_examples --packages-skip pick_and_place&& \
+        # isaac_ros_cumotion 의존성 설치
+        rosdep update && \
+        rosdep install --from-paths \${ISAAC_ROS_WS}/src/isaac_ros_cumotion --ignore-src -y && \
 
-            cd /ros2_ws/src/doosan-robot2 && \
-            chmod +x ./install_emulator.sh && \
-            sudo ./install_emulator.sh && \
-            cd /ros2_ws && \
-            colcon build --packages-skip pick_and_place && \
-            echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc && \
-            echo 'source \${ISAAC_ROS_WS}/install/setup.bash' >> ~/.bashrc && \
-            echo 'source /ros2_ws/install/setup.bash' >> ~/.bashrc && \
-            sudo usermod -aG nvidia-dcgm admin && \
-            newgrp nvidia-dcgm && \
-            /bin/bash
+        # isaac_ros_nvblox 의존성 설치 및 빌드
+        rosdep update && \
+        rosdep install -i -r --from-paths \${ISAAC_ROS_WS}/src/isaac_ros_nvblox --rosdistro \$ROS_DISTRO -y && \
+        colcon build --symlink-install --base-paths \${ISAAC_ROS_WS}/src/isaac_ros_nvblox && \
+
+        # 워크스페이스 전체 의존성 설치 및 빌드
+        cd \${ISAAC_ROS_WS}/src && \
+        rosdep install -r --from-paths . --ignore-src --rosdistro \$ROS_DISTRO -y && \
+        cd \${ISAAC_ROS_WS} && \
+        colcon build --packages-up-to isaac_ros_cumotion_examples --packages-skip pick_and_place && \
+
+        # Doosan emulator 설치 및 빌드
+        cd /ros2_ws/src/doosan-robot2 && \
+        chmod +x ./install_emulator.sh && \
+        sudo ./install_emulator.sh && \
+        cd /ros2_ws && \
+        colcon build --packages-skip pick_and_place && \
+
+        # 환경변수 자동 로드 설정
+        echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc && \
+        echo 'source \${ISAAC_ROS_WS}/install/setup.bash' >> ~/.bashrc && \
+        echo 'source /ros2_ws/install/setup.bash' >> ~/.bashrc && \
+
+        # 그룹 권한 설정
+        sudo usermod -aG nvidia-dcgm admin && \
+        newgrp nvidia-dcgm && \
+
+        # 셸 실행
+        /bin/bash
     "
