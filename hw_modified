@@ -1,0 +1,128 @@
+return_type DRHWInterface::write(const rclcpp::Time & time, const rclcpp::Duration & period)
+{
+    // ------------------------------------------------------------
+    // ① ROS 기준 주기 관리 변수
+    // ------------------------------------------------------------
+    const double DESIRED_HW_PERIOD = 0.01;  // 10 ms (100 Hz)
+    static bool first_write_pass_ = true;
+    static rclcpp::Time last_write_time_(0, 0, RCL_ROS_TIME);  // ROS 시간 기준
+
+    double dt_ros = period.seconds();  // controller_manager가 보고한 dt (ROS 기준)
+    double elapsed_ros = 0.0;
+
+    // 첫 호출 또는 정상 루프 조건 검사
+    if (first_write_pass_ || (time - last_write_time_).seconds() >= DESIRED_HW_PERIOD)
+    {
+        elapsed_ros = (time - last_write_time_).seconds();
+        last_write_time_ = time;
+        first_write_pass_ = false;
+    }
+    else
+    {
+        // 아직 원하는 주기만큼 시간이 안 지남 → skip
+        return return_type::OK;
+    }
+
+    // ------------------------------------------------------------
+    // ② 로그 파일 설정 (~/forked_humble/dsr_logs/)
+    // ------------------------------------------------------------
+    static std::ofstream csv_log;
+    static bool file_opened = false;
+
+    if (!file_opened)
+    {
+        const char *home_dir = std::getenv("HOME");
+        std::string base_dir = (home_dir ? std::string(home_dir) : "/home/unknown");
+        std::string log_dir = base_dir + "/forked_humble/dsr_logs";
+        rcpputils::fs::path log_path(log_dir);
+        rcpputils::fs::create_directories(log_path);
+
+        auto t = std::time(nullptr);
+        std::tm tm = *std::localtime(&t);
+        std::ostringstream filename;
+        filename << log_dir << "/dsr_hw_write_log_ros_"
+                 << std::put_time(&tm, "%Y%m%d_%H%M%S") << ".csv";
+
+        csv_log.open(filename.str(), std::ios::out | std::ios::trunc);
+        if (csv_log.is_open())
+        {
+            csv_log << "timestamp,dt_ros,elapsed_ros,"
+                    << "j1,j2,j3,j4,j5,j6,"
+                    << "v1,v2,v3,v4,v5,v6"
+                    << std::endl;
+            file_opened = true;
+            RCLCPP_INFO(rclcpp::get_logger("dsr_hw_interface2"),
+                        "Created ROS-time log: %s", filename.str().c_str());
+        }
+    }
+
+    // ------------------------------------------------------------
+    // ③ ROS 시간 기준 타임스탬프 계산
+    // ------------------------------------------------------------
+    double timestamp = time.seconds();
+
+    if (csv_log.is_open())
+    {
+        csv_log << std::fixed << std::setprecision(6)
+                << timestamp << "," << dt_ros << "," << elapsed_ros << ","
+                << joint_position_command_[0] << "," << joint_position_command_[1] << ","
+                << joint_position_command_[2] << "," << joint_position_command_[3] << ","
+                << joint_position_command_[4] << "," << joint_position_command_[5] << ","
+                << joint_velocities_command_[0] << "," << joint_velocities_command_[1] << ","
+                << joint_velocities_command_[2] << "," << joint_velocities_command_[3] << ","
+                << joint_velocities_command_[4] << "," << joint_velocities_command_[5]
+                << std::endl;
+        csv_log.flush();
+    }
+
+    // ------------------------------------------------------------
+    // ④ ROS 시간 기반 제어 실행
+    // ------------------------------------------------------------
+    RCLCPP_INFO(
+        rclcpp::get_logger("dsr_hw_interface2"),
+        "[WRITE][ROS TIME] dt: %.4f s | elapsed: %.4f s | pos: {%.3f, %.3f, %.3f, %.3f, %.3f, %.3f}",
+        dt_ros, elapsed_ros,
+        joint_position_command_[0], joint_position_command_[1], joint_position_command_[2],
+        joint_position_command_[3], joint_position_command_[4], joint_position_command_[5]);
+
+    static bool idle = false;
+
+    // === 기존 로직 ===
+    if (positionCommandRunning(pre_joint_position_command_, joint_position_command_))
+    {
+        if (idle)
+        {
+            Drfl.set_safety_mode(SAFETY_MODE_AUTONOMOUS, SAFETY_MODE_EVENT_MOVE);
+            idle = false;
+        }
+
+        float pos[6];
+        float targetVel[6];
+        for (int i = 0; i < 6; i++)
+        {
+            pos[i] = static_cast<float>(joint_position_command_[i] * (180.0f / M_PI));
+            targetVel[i] = static_cast<float>(joint_velocities_command_[i] * (180.0f / M_PI));
+        }
+
+        // ROS 시간 기준 servo 주기
+		float margin = 1.2f;
+
+        float servo_time = static_cast<float>(
+            std::clamp(elapsed_ros, 0.02, 0.03));  // ROS 시간 기반 보정
+        float acc[6] = {0.0f};
+        Drfl.servoj_rt(pos, targetVel, acc, servo_time*margin);
+		// Drfl.servoj_rt(pos, targetVel, acc, static_cast<float>(elapsed * margin));
+		// const float servo_time = 0.02f;   // 3 ms 고정
+		// const float margin = 1.2f;
+		// Drfl.servoj_rt(pos, targetVel, acc, servo_time * margin);
+		// Drfl.servoj_rt(pos, targetVel, acc, float(dt.seconds() * margin));
+
+
+        pre_joint_position_command_ = joint_position_command_;
+        return return_type::OK;
+    }
+
+    idle = true;
+    pre_joint_position_command_ = joint_position_command_;
+    return return_type::OK;
+}
